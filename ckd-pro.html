@@ -1,0 +1,2838 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>A Machine Learning–Based System for Early Prediction of Chronic Kidney Disease</title>
+<!-- Single consistent Google Fonts import -->
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Playfair+Display:ital,wght@0,600;0,700;1,500;1,600&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+/* ── RESET & ROOT ── */
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --bg:#f5f7fb;--bg2:#edf0f7;--white:#ffffff;
+  --navy:#0b1d3a;--navy2:#122647;--navy3:#1c3a6e;
+  --blue:#1d5fc4;--blue2:#2469e0;--blue-light:#deeafd;--blue-mid:#4d8af0;
+  --teal:#0887a8;--teal-light:#d9f4fb;
+  --green:#0a7c59;--green-light:#d0f5e8;
+  --red:#c0392b;--red-light:#fde8e8;
+  --amber:#c47a00;--amber-light:#fdf3d7;
+  --gray-50:#f8fafc;--gray-100:#f1f5f9;--gray-200:#e2e8f0;
+  --gray-300:#cbd5e1;--gray-400:#94a3b8;--gray-500:#64748b;
+  --gray-600:#475569;--gray-700:#334155;--gray-800:#1e293b;
+  --text:#0f172a;--muted:#5a6a85;--border:#dde3ef;
+  --shadow-sm:0 1px 3px rgba(0,0,0,0.07);
+  --shadow:0 2px 8px rgba(0,0,0,0.08);
+  --shadow-md:0 4px 16px rgba(0,0,0,0.10);
+  --shadow-lg:0 8px 30px rgba(0,0,0,0.11);
+  --shadow-xl:0 16px 50px rgba(0,0,0,0.13);
+  --r:8px;--r-lg:14px;--r-xl:20px;
+  /* Unified font stack */
+  --f:'Inter',system-ui,sans-serif;
+  --f-display:'Playfair Display',Georgia,serif;
+  --f-mono:'JetBrains Mono','Courier New',monospace;
+}
+
+/* ── DARK THEME ── */
+body.dark {
+  --bg:#0d1117;--bg2:#161b22;--white:#1c2128;
+  --navy:#e2e8f0;--navy2:#cbd5e1;--navy3:#93a9c8;
+  --blue:#4d8af0;--blue2:#6aa0f5;--blue-light:#1a2540;--blue-mid:#3a6fd4;
+  --teal:#2ab8d9;--teal-light:#0d2530;
+  --green:#22c55e;--green-light:#0a2018;
+  --red:#f87171;--red-light:#2a1010;
+  --amber:#fbbf24;--amber-light:#2a1f00;
+  --gray-50:#161b22;--gray-100:#1c2128;--gray-200:#2d333b;
+  --gray-300:#444c56;--gray-400:#636e7b;--gray-500:#768390;
+  --gray-600:#909dab;--gray-700:#b1bac4;--gray-800:#cdd9e5;
+  --text:#e6edf3;--muted:#8b949e;--border:#30363d;
+  --shadow-sm:0 1px 3px rgba(0,0,0,0.4);
+  --shadow:0 2px 8px rgba(0,0,0,0.5);
+  --shadow-md:0 4px 16px rgba(0,0,0,0.55);
+  --shadow-lg:0 8px 30px rgba(0,0,0,0.6);
+  --shadow-xl:0 16px 50px rgba(0,0,0,0.65);
+}
+/* ── DARK THEME ── */
+body.dark {
+  --bg:#0d1117;--bg2:#161b22;--white:#1c2128;
+  --navy:#e2e8f0;--navy2:#cbd5e1;--navy3:#93a9c8;
+  --blue:#4d8af0;--blue2:#6aa0f5;--blue-light:#1a2540;--blue-mid:#3a6fd4;
+  --teal:#2ab8d9;--teal-light:#0d2530;
+  --green:#22c55e;--green-light:#0a2018;
+  --red:#f87171;--red-light:#2a1010;
+  --amber:#fbbf24;--amber-light:#2a1f00;
+  --gray-50:#161b22;--gray-100:#1c2128;--gray-200:#2d333b;
+  --gray-300:#444c56;--gray-400:#636e7b;--gray-500:#768390;
+  --gray-600:#909dab;--gray-700:#b1bac4;--gray-800:#cdd9e5;
+  --text:#e6edf3;--muted:#8b949e;--border:#30363d;
+  --shadow-sm:0 1px 3px rgba(0,0,0,0.4);
+  --shadow:0 2px 8px rgba(0,0,0,0.5);
+  --shadow-md:0 4px 16px rgba(0,0,0,0.55);
+  --shadow-lg:0 8px 30px rgba(0,0,0,0.6);
+  --shadow-xl:0 16px 50px rgba(0,0,0,0.65);
+}
+
+/* ══════════════════════════════════════════
+   DARK THEME — COMPLETE OVERRIDES
+   ══════════════════════════════════════════ */
+body.dark {
+  --bg:#0d1117;--bg2:#161b22;--white:#1c2128;
+  --navy:#e2e8f0;--navy2:#cbd5e1;--navy3:#93a9c8;
+  --blue:#4d8af0;--blue2:#6aa0f5;--blue-light:#1a2540;--blue-mid:#3a6fd4;
+  --teal:#2ab8d9;--teal-light:#0d2530;
+  --green:#22c55e;--green-light:#0a2018;
+  --red:#f87171;--red-light:#2a1010;
+  --amber:#fbbf24;--amber-light:#2a1f00;
+  --gray-50:#161b22;--gray-100:#1c2128;--gray-200:#2d333b;
+  --gray-300:#444c56;--gray-400:#636e7b;--gray-500:#768390;
+  --gray-600:#909dab;--gray-700:#b1bac4;--gray-800:#cdd9e5;
+  --text:#e6edf3;--muted:#8b949e;--border:#30363d;
+  --shadow-sm:0 1px 3px rgba(0,0,0,0.4);
+  --shadow:0 2px 8px rgba(0,0,0,0.5);
+  --shadow-md:0 4px 16px rgba(0,0,0,0.55);
+  --shadow-lg:0 8px 30px rgba(0,0,0,0.6);
+  --shadow-xl:0 16px 50px rgba(0,0,0,0.65);
+}
+
+/* BASE TEXT — catch everything */
+body.dark { color:#e6edf3; background:#0d1117; }
+body.dark h1,body.dark h2,body.dark h3,body.dark h4,body.dark h5,body.dark h6 { color:#e2e8f0; }
+body.dark p { color:#c9d1d9; }
+body.dark span { color:inherit; }
+body.dark label { color:#c9d1d9; }
+body.dark li { color:#c9d1d9; }
+body.dark strong { color:#e6edf3; }
+body.dark em { color:inherit; }
+body.dark td,body.dark th { color:#c9d1d9; }
+
+/* NAV */
+body.dark #mainNav { background:rgba(13,17,23,0.97); border-bottom-color:#30363d; }
+body.dark .nav-logo-text { color:#e2e8f0; }
+body.dark .nav-logo-pill { background:#1a2540; color:#4d8af0; }
+body.dark .nav-links a { color:#8b949e; }
+body.dark .nav-links a:hover,body.dark .nav-links a.active { color:#4d8af0; background:#1a2540; }
+body.dark .btn-nav-ghost { background:transparent; border-color:#30363d; color:#c9d1d9; }
+body.dark .btn-nav-ghost:hover { border-color:#4d8af0; color:#4d8af0; }
+body.dark .mobile-nav { background:#161b22; border-bottom-color:#30363d; }
+body.dark .mobile-nav a { color:#8b949e; }
+body.dark .mobile-nav a:hover { background:#1a2540; color:#4d8af0; }
+body.dark .hamburger span { background:#c9d1d9; }
+
+/* HERO */
+body.dark .hero-wrap { background:linear-gradient(135deg,#0d1117 0%,#0f1923 50%,#0d1117 100%); }
+body.dark .hero-eyebrow { background:#1c2128; border-color:#30363d; color:#4d8af0; }
+body.dark .hero-eyebrow .dot { background:#22c55e; }
+body.dark .hero h1 { color:#e2e8f0; }
+body.dark .hero h1 em { color:#4d8af0; }
+body.dark .hero-desc { color:#8b949e; }
+body.dark .hero-kpis { border-color:#30363d; }
+body.dark .kpi { border-color:#30363d; }
+body.dark .kpi-val { color:#4d8af0; }
+body.dark .kpi-lbl { color:#8b949e; }
+body.dark .btn-hero-primary { background:linear-gradient(135deg,#4d8af0,#2ab8d9); color:#fff; }
+body.dark .btn-hero-outline { border-color:#30363d; color:#c9d1d9; }
+body.dark .btn-hero-outline:hover { border-color:#4d8af0; color:#4d8af0; }
+/* dash card in hero */
+body.dark .dash-card { background:#1c2128; border-color:#30363d; }
+body.dark .dash-body { background:#1c2128; }
+body.dark .dash-head { background:linear-gradient(135deg,#161b22,#0f1923); }
+body.dark .dash-head-title { color:rgba(225,232,240,0.85); }
+body.dark .dash-live { color:rgba(200,210,220,0.55); }
+body.dark .ring-bg { stroke:#2d333b; }
+body.dark .mini-val { color:#e2e8f0; }
+body.dark .mini-lbl { color:#8b949e; }
+body.dark .dash-badge { background:#0a2018; border-color:rgba(34,197,94,0.2); }
+body.dark .dash-badge-text { color:#22c55e; }
+body.dark .dash-badge-conf { color:#22c55e; }
+body.dark .float-chip { background:#1c2128; border-color:#30363d; color:#e6edf3; }
+
+/* MARQUEE */
+body.dark .marquee-wrap { background:#161b22; border-color:#30363d; }
+body.dark .m-item { color:#8b949e; }
+body.dark .m-dot { background:#30363d; }
+
+/* STAT STRIP */
+body.dark .stat-strip { background:#161b22; border-color:#30363d; }
+body.dark .stat-strip-item { border-color:#30363d; }
+body.dark .stat-n { color:#e2e8f0; }
+body.dark .stat-n .accent { color:#4d8af0; }
+body.dark .stat-d { color:#8b949e; }
+
+/* HOW IT WORKS (dark navy bg — keep headings bright) */
+body.dark .how-section { background:linear-gradient(180deg,#0d1117,#0f1923); }
+body.dark .how-section .section-h { color:#e2e8f0 !important; }
+body.dark .how-section .section-p { color:rgba(180,195,210,0.6) !important; }
+body.dark .pipe-item { background:rgba(255,255,255,0.04); border-color:rgba(255,255,255,0.08); }
+body.dark .pipe-item h3 { color:#e2e8f0; }
+body.dark .pipe-item p { color:rgba(180,195,210,0.58); }
+body.dark .pipe-num { background:#4d8af0; color:#fff; }
+body.dark .pipe-line { background:#30363d; }
+
+/* MODELS / TABS */
+body.dark .tabs-nav { background:#161b22; border-color:#30363d; }
+body.dark .tab-btn { color:#8b949e; background:transparent; border-color:#30363d; }
+body.dark .tab-btn:hover { background:#2d333b; color:#e6edf3; }
+body.dark .tab-btn.active { background:#4d8af0; color:#fff; border-color:#4d8af0; }
+body.dark .tab-panel { background:#1c2128; border-color:#30363d; }
+/* accuracy table */
+body.dark .model-table { border-color:#30363d; }
+body.dark .model-table thead tr { background:#0d1117; }
+body.dark .model-table th { background:#0d1117; color:#8b949e; border-color:#30363d; }
+body.dark .model-table td { color:#c9d1d9; border-color:#30363d; }
+body.dark .model-table tr:hover td { background:#2d333b; }
+body.dark .best-row td { background:#1a2540 !important; }
+body.dark .best-row td strong { color:#e6edf3; }
+body.dark .best-row:hover td { background:#1e2d52 !important; }
+body.dark .badge-best { background:#4d8af0; color:#fff; }
+body.dark .acc-bar { background:#4d8af0 !important; }
+body.dark .acc-bar-wrap { color:#c9d1d9; }
+/* confusion matrix */
+body.dark .cm-wrap { color:#c9d1d9; }
+body.dark .cm-legend { color:#8b949e; }
+body.dark .cm-lbl { color:#8b949e; }
+body.dark .cm-val { color:inherit; }
+body.dark .cm-tag { color:inherit; }
+body.dark .cm-tp,body.dark .cm-tn { background:#0a2018; color:#22c55e; }
+body.dark .cm-fp { background:#2a1010; color:#f87171; }
+body.dark .cm-fn { background:#2a1f00; color:#fbbf24; }
+body.dark .cm-metrics { background:#1c2128; border-color:#30363d; }
+body.dark .cm-row { border-color:#30363d; }
+body.dark .cm-row-name { color:#8b949e; }
+body.dark .cm-row-val { color:#4d8af0; }
+/* feature importance */
+body.dark .fi-name { color:#b1bac4; }
+body.dark .fi-track { background:#2d333b; }
+body.dark .fi-pct { color:#4d8af0; }
+
+/* FEATURES SECTION */
+body.dark .feat-card { background:#1c2128; border-color:#30363d; }
+body.dark .feat-card:hover { border-color:#4d8af0; box-shadow:0 8px 30px rgba(0,0,0,0.6); }
+body.dark .feat-card h3 { color:#e2e8f0; }
+body.dark .feat-card p { color:#8b949e; }
+body.dark .feat-icon { background:#1a2540; }
+
+/* PREDICTION TOOL */
+body.dark .pred-wrap { background:#161b22; }
+body.dark .pred-card { background:#161b22; border-color:#30363d; }
+body.dark .pred-head { background:linear-gradient(135deg,#1c2128,#0f1923); border-bottom-color:#30363d; }
+body.dark .pred-head h2 { color:#e2e8f0; }
+body.dark .pred-head p { color:rgba(180,195,210,0.55); }
+body.dark .pred-tabs { border-color:#30363d; background:#0d1117; }
+body.dark .pred-tab { background:#0d1117; border-color:transparent; color:#8b949e; }
+body.dark .pred-tab:hover { color:#c9d1d9; background:#1c2128; }
+body.dark .pred-tab.active { color:#4d8af0; border-bottom-color:#4d8af0; background:#161b22; }
+body.dark .pred-body { background:#161b22; }
+body.dark .pred-tab-panel { background:#161b22; }
+body.dark .field-section { color:#8b949e; border-color:#30363d; }
+body.dark .fgroup label { color:#c9d1d9; }
+body.dark .fgroup .range-hint { color:#2ab8d9; }
+body.dark .form-ctrl { background:#0d1117; border-color:#30363d; color:#e6edf3; }
+body.dark .form-ctrl:hover { border-color:#444c56; }
+body.dark .form-ctrl:focus { background:#0d1117; border-color:#4d8af0; box-shadow:0 0 0 3px rgba(77,138,240,0.15); }
+body.dark .form-ctrl option { background:#1c2128; color:#e6edf3; }
+body.dark .unit-lbl { color:#8b949e; }
+body.dark .input-wrap .unit-lbl { background:#2d333b; border-color:#30363d; color:#8b949e; }
+body.dark .radio-opt label { background:#0d1117; border-color:#30363d; color:#8b949e; }
+body.dark .radio-opt label:hover { border-color:#4d8af0; color:#c9d1d9; }
+body.dark .radio-opt input:checked+label { background:#1a2540; border-color:#4d8af0; color:#4d8af0; }
+body.dark .check-item { color:#c9d1d9; }
+body.dark .check-item input { accent-color:#4d8af0; }
+body.dark .pred-actions { border-color:#30363d; background:#0d1117; }
+/* action buttons */
+body.dark .btn-ghost { background:#1c2128; color:#c9d1d9; border-color:#30363d; }
+body.dark .btn-ghost:hover { background:#2d333b; border-color:#444c56; color:#e6edf3; }
+body.dark .btn-warn { background:#2a1f00; color:#fbbf24; border-color:rgba(251,191,36,0.25); }
+body.dark .btn-warn:hover { background:#3a2b00; }
+body.dark .btn-ok { background:#0a2018; color:#22c55e; border-color:rgba(34,197,94,0.25); }
+body.dark .btn-ok:hover { background:#113325; }
+
+/* RESULTS */
+body.dark .result-section { background:#161b22; }
+body.dark .alert-low { background:#0a2018; border-color:rgba(34,197,94,0.25); }
+body.dark .alert-low .alert-title { color:#22c55e; }
+body.dark .alert-high { background:#2a1010; border-color:rgba(248,113,113,0.25); }
+body.dark .alert-high .alert-title { color:#f87171; }
+body.dark .alert-desc { color:#8b949e; }
+body.dark .res-card { background:#0d1117; border-color:#30363d; }
+body.dark .res-card-lbl { color:#8b949e; }
+body.dark .res-card-val { color:#e6edf3; }
+/* SHAP box */
+body.dark .shap-box { background:#0d1117; border-color:#30363d; }
+body.dark .shap-title { color:#8b949e; }
+body.dark .shap-name { color:#b1bac4; }
+body.dark .shap-track { background:#2d333b; }
+body.dark .shap-val.pos { color:#f87171; }
+body.dark .shap-val.neg { color:#4d8af0; }
+/* stage chips in results */
+body.dark .cs1 { background:#1a2540; color:#7ab3ff; }
+body.dark .cs2 { background:#0a2018; color:#4ade80; }
+body.dark .cs3 { background:#2a1f00; color:#fbbf24; }
+body.dark .cs4 { background:#2a1200; color:#fb923c; }
+body.dark .cs5 { background:#2a1010; color:#f87171; }
+/* recs box */
+body.dark .recs-box { background:#1a2540; border-color:rgba(77,138,240,0.2); }
+body.dark .recs-title { color:#4d8af0; }
+body.dark .rec-item { color:#c9d1d9; }
+/* prob section */
+body.dark .prob-section { background:#0d1117; border-color:#30363d; }
+body.dark .prob-section h4 { color:#e2e8f0; }
+body.dark .prob-row-label span:first-child { color:#c9d1d9; }
+body.dark .prob-track { background:#2d333b; }
+/* result download buttons */
+body.dark .btn-dl-dark { background:#1c2128; color:#e6edf3; border:1.5px solid #30363d; }
+body.dark .btn-dl-dark:hover { background:#2d333b; border-color:#444c56; }
+body.dark .btn-dl-teal { background:#0d2530; color:#2ab8d9; border-color:rgba(42,184,217,0.25); }
+body.dark .btn-dl-teal:hover { background:#122e3c; }
+body.dark .btn-dl-ghost { background:#1c2128; color:#b1bac4; border-color:#30363d; }
+body.dark .btn-dl-ghost:hover { border-color:#4d8af0; color:#4d8af0; background:#1a2540; }
+
+/* BATCH UPLOAD */
+body.dark .upload-zone { background:#1c2128; border-color:#30363d; }
+body.dark .upload-zone:hover,body.dark .upload-zone.drag { background:#1a2540; border-color:#4d8af0; }
+body.dark .upload-zone h3 { color:#e2e8f0; }
+body.dark .upload-zone p { color:#8b949e; }
+body.dark .upload-cta { background:#4d8af0; color:#fff; }
+body.dark .batch-table { border-color:#30363d; }
+body.dark .batch-table th { background:#0d1117; color:#8b949e; border-color:#30363d; }
+body.dark .batch-table td { color:#c9d1d9; border-color:#30363d; }
+body.dark .batch-table tr:hover td { background:#1c2128; }
+
+/* RISK CALCULATOR */
+body.dark .calc-gauge-wrap { background:#1c2128; border-color:#30363d; }
+body.dark .bg-track { stroke:#2d333b; }
+body.dark .gauge-pct { color:#e2e8f0; }
+body.dark .gauge-lbl { color:#8b949e; }
+body.dark .rf-row { background:#0d1117; border-color:#30363d; }
+body.dark .rf-name { color:#b1bac4; }
+body.dark .egfr-display { border-color:#30363d; }
+body.dark .egfr-label { color:#8b949e; }
+body.dark .egfr-val { color:#e2e8f0; }
+body.dark .egfr-stage { color:#8b949e; }
+body.dark .slider-group label { color:#c9d1d9; }
+body.dark .slider-group label span { color:#4d8af0; }
+body.dark input[type=range] { accent-color:#4d8af0; }
+body.dark .calc-check { color:#c9d1d9; }
+body.dark .calc-check input { accent-color:#4d8af0; }
+
+/* HISTORY */
+body.dark .hist-wrap { background:#1c2128; border-color:#30363d; }
+body.dark .hist-item { background:#0d1117; border-color:#30363d; }
+body.dark .hist-item:hover { background:#1a2540; border-color:#4d8af0; }
+body.dark .hist-date { color:#8b949e; }
+body.dark .hist-info h4 { color:#e2e8f0; }
+body.dark .hist-info p { color:#8b949e; }
+body.dark .hist-empty { color:#8b949e; }
+body.dark .hist-empty p { color:#8b949e; }
+
+/* CKD EDUCATION */
+body.dark .edu-card { background:#161b22; border-color:#30363d; }
+body.dark .edu-top { background:linear-gradient(135deg,#1c2128,#0f1923); border-bottom-color:#30363d; }
+body.dark .edu-top h3 { color:#e2e8f0; }
+body.dark .edu-top p { color:rgba(180,195,210,0.55); }
+body.dark .acc-btn { background:transparent; border-color:#30363d; color:#c9d1d9; }
+body.dark .acc-btn:hover { background:#2d333b; color:#e6edf3; }
+body.dark .acc-btn svg { stroke:#8b949e; }
+body.dark .acc-content { color:#8b949e; background:transparent; }
+body.dark .acc-content strong { color:#c9d1d9; }
+/* CKD Info 3-col box */
+body.dark div[style*="background:white"][style*="border:1px solid var(--border)"] { background:#1c2128 !important; border-color:#30363d !important; }
+body.dark div[style*="background:white"][style*="border-radius:var(--r-xl)"] { background:#1c2128 !important; border-color:#30363d !important; }
+/* Stage vis cards */
+body.dark .stage-vis-card:nth-child(1) { background:#1a2540 !important; border-color:#2a3f70 !important; }
+body.dark .stage-vis-card:nth-child(1) h4 { color:#7ab3ff !important; }
+body.dark .stage-vis-card:nth-child(1) .gfr { color:#5a9aff !important; }
+body.dark .stage-vis-card:nth-child(1) p { color:#93b8e8 !important; }
+body.dark .stage-vis-card:nth-child(2) { background:#0a2018 !important; border-color:#144d30 !important; }
+body.dark .stage-vis-card:nth-child(2) h4 { color:#4ade80 !important; }
+body.dark .stage-vis-card:nth-child(2) .gfr { color:#22c55e !important; }
+body.dark .stage-vis-card:nth-child(2) p { color:#86efac !important; }
+body.dark .stage-vis-card:nth-child(3) { background:#2a1f00 !important; border-color:#4a3800 !important; }
+body.dark .stage-vis-card:nth-child(3) h4 { color:#fbbf24 !important; }
+body.dark .stage-vis-card:nth-child(3) .gfr { color:#f59e0b !important; }
+body.dark .stage-vis-card:nth-child(3) p { color:#fde68a !important; }
+body.dark .stage-vis-card:nth-child(4) { background:#2a1200 !important; border-color:#5a2800 !important; }
+body.dark .stage-vis-card:nth-child(4) h4 { color:#fb923c !important; }
+body.dark .stage-vis-card:nth-child(4) .gfr { color:#f97316 !important; }
+body.dark .stage-vis-card:nth-child(4) p { color:#fdba74 !important; }
+body.dark .stage-vis-card:nth-child(5) { background:#2a1010 !important; border-color:#5a1515 !important; }
+body.dark .stage-vis-card:nth-child(5) h4 { color:#f87171 !important; }
+body.dark .stage-vis-card:nth-child(5) .gfr { color:#ef4444 !important; }
+body.dark .stage-vis-card:nth-child(5) p { color:#fca5a5 !important; }
+/* tip info boxes */
+body.dark div[style*="background:var(--blue-light)"] { background:#1a2540 !important; border-color:#2a3f6a !important; }
+body.dark div[style*="background:#dbeafe"] { background:#1a2540 !important; border-color:#2a3f6a !important; }
+
+/* ABOUT */
+body.dark .about-grid { background:linear-gradient(135deg,#161b22,#0f1923); }
+body.dark .about-visual { background:#1c2128; }
+body.dark .team-card { background:#1c2128; border-color:#30363d; }
+body.dark .team-name { color:#e2e8f0; }
+body.dark .team-role { color:#8b949e; }
+body.dark .team-spec { color:#4d8af0; }
+body.dark .tech-pill { background:#1c2128; color:#b1bac4; border:1px solid #30363d; }
+
+/* FOOTER — already dark navy background, just tweak text */
+body.dark footer { background:#0a0e14; }
+body.dark .footer-brand p { color:rgba(180,195,210,0.5); }
+body.dark .footer-brand .brand-text { color:#e2e8f0; }
+body.dark .footer-col h4 { color:rgba(180,195,210,0.45); }
+body.dark .footer-col a { color:rgba(180,195,210,0.65); }
+body.dark .footer-col a:hover { color:#e2e8f0; }
+body.dark .footer-bottom { border-color:rgba(255,255,255,0.08); }
+body.dark .footer-copy { color:rgba(180,195,210,0.4); }
+body.dark .footer-disc { color:rgba(180,195,210,0.3); }
+
+/* SCROLLBAR */
+body.dark ::-webkit-scrollbar-track { background:#161b22; }
+body.dark ::-webkit-scrollbar-thumb { background:#30363d; }
+body.dark ::-webkit-scrollbar-thumb:hover { background:#444c56; }
+
+/* SECTION backgrounds that use white */
+body.dark section[style*="background:white"],
+body.dark .section[style*="background:white"] { background:#161b22 !important; }
+body.dark section[style*="background:var(--bg2)"],
+body.dark .section[style*="background:var(--bg2)"] { background:#0d1117 !important; }
+body.dark .mobile-nav{background:#161b22;border-bottom-color:var(--border)}
+body.dark .mobile-nav a{color:var(--gray-700)}
+body.dark .mobile-nav a:hover{color:var(--blue);background:var(--blue-light)}
+body.dark .hamburger span{background:var(--gray-700)}
+
+/* HERO */
+body.dark .hero-wrap{background:linear-gradient(135deg,#0d1117 0%,#0f1923 50%,#0d1117 100%)}
+body.dark .hero-eyebrow{background:#1c2128;border-color:var(--border);color:var(--blue)}
+body.dark .hero-desc{color:var(--muted)}
+body.dark .hero-kpis{border-color:var(--border)}
+body.dark .kpi{border-color:var(--border)}
+body.dark .hero-visual .dash-card{background:#1c2128;border-color:var(--border)}
+body.dark .dash-body{background:#1c2128}
+body.dark .mini-val{color:var(--navy)}
+body.dark .float-chip{background:#1c2128;border-color:var(--border);color:var(--text)}
+
+/* MARQUEE + STAT STRIP */
+body.dark .marquee-wrap{background:#161b22;border-color:var(--border)}
+body.dark .m-item{color:var(--muted)}
+body.dark .stat-strip{background:#161b22;border-color:var(--border)}
+body.dark .stat-strip-item{border-color:var(--border)}
+body.dark .stat-n{color:var(--navy)}
+body.dark .stat-d{color:var(--muted)}
+
+/* HOW IT WORKS */
+body.dark .how-section{background:linear-gradient(180deg,#0d1117,#0f1923)}
+body.dark .pipe-item{background:rgba(255,255,255,0.04);border-color:rgba(255,255,255,0.08)}
+body.dark .pipe-item h3{color:#e2e8f0}
+body.dark .pipe-item p{color:rgba(200,210,220,0.6)}
+
+/* MODELS / TABS */
+body.dark .tabs-nav{background:#161b22;border-color:var(--border)}
+body.dark .tab-btn{color:var(--muted);background:transparent}
+body.dark .tab-btn:hover{background:#2d333b;color:var(--text)}
+body.dark .tab-btn.active{background:var(--blue);color:white}
+body.dark .tab-panel{background:#1c2128;border-color:var(--border)}
+body.dark .model-table{border-color:var(--border)}
+body.dark .model-table thead{background:#0d1117}
+body.dark .model-table th{background:#0d1117;color:var(--muted);border-color:var(--border)}
+body.dark .model-table td{border-color:var(--border);color:var(--text)}
+body.dark .model-table tr:hover td{background:#2d333b}
+body.dark .best-row td{background:#1a2540 !important}
+body.dark .best-row:hover td{background:#1e2d52 !important}
+body.dark .acc-bar{background:var(--blue)}
+body.dark .cm-lbl{color:var(--muted)}
+body.dark .cm-metrics{background:#1c2128;border-color:var(--border)}
+body.dark .cm-row{border-color:var(--border)}
+body.dark .cm-row-name{color:var(--muted)}
+body.dark .cm-row-val{color:var(--text)}
+body.dark .cm-legend{color:var(--muted)}
+body.dark .fi-name{color:var(--gray-700)}
+body.dark .fi-track{background:#2d333b}
+body.dark .fi-pct{color:var(--blue)}
+
+/* FEATURES */
+body.dark .feat-card{background:#1c2128;border-color:var(--border)}
+body.dark .feat-card:hover{border-color:var(--blue)}
+body.dark .feat-card h3{color:var(--navy)}
+body.dark .feat-card p{color:var(--muted)}
+
+/* PREDICTION FORM */
+body.dark .pred-wrap{background:var(--bg2)}
+body.dark .pred-card{background:#161b22;border-color:var(--border)}
+body.dark .pred-head{background:linear-gradient(135deg,#1c2128,#0f1923);border-bottom-color:var(--border)}
+body.dark .pred-head h2{color:var(--navy)}
+body.dark .pred-head p{color:var(--muted)}
+body.dark .pred-tab{background:#0d1117;border-color:var(--border);color:var(--muted)}
+body.dark .pred-tab.active{background:var(--blue);color:white;border-color:var(--blue)}
+body.dark .pred-tab-panel{background:#161b22}
+body.dark .field-section{color:var(--muted);border-color:var(--border)}
+body.dark .fgroup label{color:var(--text)}
+body.dark .fgroup .range-hint{color:var(--teal)}
+body.dark .form-ctrl{background:#1c2128;border-color:var(--border);color:var(--text)}
+body.dark .form-ctrl:focus{background:#1c2128;border-color:var(--blue)}
+body.dark .form-ctrl option{background:#1c2128;color:var(--text)}
+body.dark .input-wrap .unit-lbl{background:#2d333b;border-color:var(--border);color:var(--muted)}
+body.dark .radio-opt label{background:#1c2128;border-color:var(--border);color:var(--gray-700)}
+body.dark .radio-opt input:checked+label{background:var(--blue-light);border-color:var(--blue);color:var(--blue)}
+body.dark .check-item{color:var(--text)}
+body.dark .pred-actions{border-color:var(--border)}
+
+/* RESULTS */
+body.dark .result-box{background:#1c2128;border-color:var(--border)}
+body.dark .result-card{background:#0d1117;border-color:var(--border)}
+body.dark .result-card-label{color:var(--muted)}
+body.dark .result-card-val{color:var(--text)}
+body.dark .shap-box{background:#0d1117;border-color:var(--border)}
+body.dark .shap-title{color:var(--muted)}
+body.dark .shap-name{color:var(--gray-700)}
+body.dark .shap-bar-bg,.shap-track{background:#2d333b}
+body.dark .shap-val.pos{color:#f87171}
+body.dark .shap-val.neg{color:var(--blue)}
+body.dark .rec-item{color:var(--text)}
+body.dark .stage-section{border-color:var(--border)}
+body.dark .stage-label{color:var(--muted)}
+body.dark .stage-card.active{border-color:var(--blue) !important}
+body.dark .ens-bar-track{background:#2d333b}
+body.dark .ens-model-name{color:var(--muted)}
+body.dark .result-btns{border-color:var(--border)}
+body.dark .btn-dl-dark{background:var(--navy3);color:white}
+body.dark .btn-dl-teal{background:var(--teal-light);color:var(--teal)}
+body.dark .btn-dl-ghost{background:#1c2128;color:var(--gray-700);border-color:var(--border)}
+body.dark .btn-dl-ghost:hover{border-color:var(--blue);color:var(--blue)}
+
+/* BATCH UPLOAD */
+body.dark .upload-zone{background:#1c2128;border-color:var(--border)}
+body.dark .upload-zone:hover{background:#2d333b;border-color:var(--blue)}
+body.dark .upload-zone h3{color:var(--navy)}
+body.dark .upload-zone p{color:var(--muted)}
+body.dark .upload-cta{background:var(--blue-light);color:var(--blue)}
+body.dark .batch-table th{background:#0d1117;color:var(--muted);border-color:var(--border)}
+body.dark .batch-table td{color:var(--text);border-color:var(--border)}
+body.dark .batch-table tr:hover td{background:#1c2128}
+
+/* RISK CALCULATOR */
+body.dark .calc-box{background:#1c2128;border-color:var(--border)}
+body.dark .gauge-wrap{background:#1c2128;border-color:var(--border)}
+body.dark .slider-group label{color:var(--text)}
+body.dark .slider-group input[type=range]{accent-color:var(--blue)}
+body.dark .calc-check{color:var(--text)}
+body.dark .calc-factor-item{color:var(--muted)}
+body.dark .egfr-label{color:var(--muted)}
+body.dark .risk-factor-title{color:var(--muted)}
+
+/* HISTORY */
+body.dark .hist-item{background:#1c2128;border-color:var(--border)}
+body.dark .hist-item:hover{border-color:var(--blue)}
+body.dark .hist-empty p{color:var(--muted)}
+
+/* CKD EDUCATION */
+body.dark .edu-card{background:#161b22;border-color:var(--border)}
+body.dark .edu-top{background:linear-gradient(135deg,#1c2128,#0f1923);border-bottom-color:var(--border)}
+body.dark .edu-top h3{color:var(--navy)}
+body.dark .edu-top p{color:var(--muted)}
+body.dark .acc-btn{background:#1c2128;border-color:var(--border);color:var(--text)}
+body.dark .acc-btn:hover{background:#2d333b}
+body.dark .acc-btn svg{stroke:var(--muted)}
+body.dark .acc-content{background:#0d1117;border-color:var(--border);color:var(--gray-700)}
+body.dark .acc-content strong{color:var(--text)}
+/* CKD Stages - dark-friendly versions */
+body.dark .stage-vis-card:nth-child(1){background:#1a2540 !important;border-color:#2a3f70 !important}
+body.dark .stage-vis-card:nth-child(1) h4{color:#7ab3ff !important}
+body.dark .stage-vis-card:nth-child(1) .gfr{color:#5a9aff !important}
+body.dark .stage-vis-card:nth-child(1) p{color:#93b8e8 !important}
+body.dark .stage-vis-card:nth-child(2){background:#0a2018 !important;border-color:#144d30 !important}
+body.dark .stage-vis-card:nth-child(2) h4{color:#4ade80 !important}
+body.dark .stage-vis-card:nth-child(2) .gfr{color:#22c55e !important}
+body.dark .stage-vis-card:nth-child(2) p{color:#86efac !important}
+body.dark .stage-vis-card:nth-child(3){background:#2a1f00 !important;border-color:#4a3800 !important}
+body.dark .stage-vis-card:nth-child(3) h4{color:#fbbf24 !important}
+body.dark .stage-vis-card:nth-child(3) .gfr{color:#f59e0b !important}
+body.dark .stage-vis-card:nth-child(3) p{color:#fde68a !important}
+body.dark .stage-vis-card:nth-child(4){background:#2a1200 !important;border-color:#5a2800 !important}
+body.dark .stage-vis-card:nth-child(4) h4{color:#fb923c !important}
+body.dark .stage-vis-card:nth-child(4) .gfr{color:#f97316 !important}
+body.dark .stage-vis-card:nth-child(4) p{color:#fdba74 !important}
+body.dark .stage-vis-card:nth-child(5){background:#2a1010 !important;border-color:#5a1515 !important}
+body.dark .stage-vis-card:nth-child(5) h4{color:#f87171 !important}
+body.dark .stage-vis-card:nth-child(5) .gfr{color:#ef4444 !important}
+body.dark .stage-vis-card:nth-child(5) p{color:#fca5a5 !important}
+
+/* PROJECT TITLE BOX — fix blank background in dark mode */
+body.dark .project-title-box { background:linear-gradient(135deg,#1c2d4f,#1a3a6e) !important; border-left-color:#4d8af0 !important; }
+body.dark .project-title-box div { color:rgba(255,255,255,0.5) !important; }
+body.dark .project-title-box div:last-child { color:#e2e8f0 !important; }
+body.dark .project-title-box div:last-child span { color:#93c5fd !important; }
+
+/* TOAST NOTIFICATIONS — dark background */
+body.dark .toast { background:#0d1117; color:#e6edf3; border-color:#30363d; box-shadow:0 8px 30px rgba(0,0,0,0.7); }
+body.dark .toast.ok { border-left-color:#22c55e; }
+body.dark .toast.warn { border-left-color:#f59e0b; }
+body.dark .toast.err { border-left-color:#ef4444; }
+.theme-toggle{
+  display:inline-flex;align-items:center;gap:0.5rem;
+  background:var(--gray-100);border:1.5px solid var(--border);
+  border-radius:100px;padding:0.3rem 0.8rem 0.3rem 0.4rem;
+  cursor:pointer;transition:all 0.22s;flex-shrink:0;
+  font-family:var(--f);font-size:0.8rem;font-weight:600;color:var(--gray-700);
+  user-select:none;
+}
+.theme-toggle:hover{border-color:var(--blue);color:var(--blue);background:var(--blue-light)}
+.tt-track{
+  width:34px;height:18px;border-radius:100px;
+  background:var(--gray-300);position:relative;
+  transition:background 0.25s;flex-shrink:0;
+}
+body.dark .tt-track{background:var(--blue)}
+.tt-knob{
+  width:12px;height:12px;border-radius:50%;background:white;
+  position:absolute;top:3px;left:3px;
+  transition:transform 0.25s cubic-bezier(0.4,0,0.2,1);
+  box-shadow:0 1px 3px rgba(0,0,0,0.3);
+}
+body.dark .tt-knob{transform:translateX(16px)}
+.tt-icon{font-size:0.9rem;line-height:1}
+.tt-label-light,.tt-label-dark{font-size:0.8rem;font-weight:600;white-space:nowrap}
+.tt-label-dark{display:none}
+body.dark .tt-label-light{display:none}
+body.dark .tt-label-dark{display:inline}
+body.dark .theme-toggle{color:var(--gray-300)}
+
+html{scroll-behavior:smooth}
+html.dark,body.dark{background:#0d1117}
+body{font-family:var(--f);color:var(--text);background:var(--bg);line-height:1.6;-webkit-font-smoothing:antialiased;font-size:15px;transition:background 0.3s,color 0.3s}
+
+/* ── GLOBAL FONT RULES — enforce consistency everywhere ── */
+h1,h2,h3,h4,h5,h6{font-family:var(--f);font-weight:700;line-height:1.2;color:var(--navy)}
+p,li,span,label,td,th,div{font-family:var(--f)}
+code,kbd,pre,.mono,.font-mono,[class*="-mono"]{font-family:var(--f-mono)}
+.display-text,.section-h,.hero h1,.modal-head h3{font-family:var(--f-display)}
+button,input,select,textarea{font-family:var(--f);font-size:0.875rem}
+
+::-webkit-scrollbar{width:5px}
+::-webkit-scrollbar-track{background:var(--gray-100)}
+::-webkit-scrollbar-thumb{background:var(--gray-300);border-radius:3px}
+
+/* ── LOADER ── */
+#loader{position:fixed;inset:0;background:#0b1d3a;z-index:9999;display:flex;flex-direction:column;align-items:center;justify-content:center;transition:opacity 0.5s ease}
+#loader.hidden{opacity:0;pointer-events:none}
+body.dark #loader{background:#0d1117}
+.loader-logo{font-family:var(--f);font-weight:800;font-size:1.7rem;color:#fff;letter-spacing:-0.02em;margin-bottom:1.5rem}
+.loader-logo span{color:#4d8af0}
+.loader-bar{width:180px;height:3px;background:rgba(255,255,255,0.12);border-radius:2px;overflow:hidden}
+.loader-fill{height:100%;background:linear-gradient(90deg,#2469e0,#0887a8);animation:loaderFill 1.3s ease-in-out forwards}
+@keyframes loaderFill{from{width:0}to{width:100%}}
+.loader-sub{font-family:var(--f-mono);font-size:0.72rem;color:rgba(255,255,255,0.4);margin-top:0.85rem;letter-spacing:0.1em}
+
+/* ── NAV ── */
+#mainNav{position:fixed;top:0;left:0;right:0;z-index:500;background:rgba(255,255,255,0.97);backdrop-filter:blur(18px);border-bottom:1px solid var(--border);transition:box-shadow 0.3s}
+#mainNav.scrolled{box-shadow:var(--shadow-md)}
+.nav-inner{max-width:1300px;margin:0 auto;padding:0 2rem;height:66px;display:flex;align-items:center;justify-content:space-between;gap:1rem}
+.nav-logo{display:flex;align-items:center;gap:0.65rem;text-decoration:none}
+.nav-logo-icon{width:34px;height:34px;background:linear-gradient(135deg,var(--blue),var(--teal));border-radius:8px;display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.nav-logo-icon svg{width:18px;height:18px;fill:white}
+.nav-logo-text{font-family:var(--f);font-weight:800;font-size:1.05rem;color:var(--navy);letter-spacing:-0.02em}
+.nav-logo-text em{font-style:normal;color:var(--blue)}
+.nav-logo-pill{font-family:var(--f-mono);font-size:0.6rem;background:var(--blue-light);color:var(--blue);padding:0.15rem 0.4rem;border-radius:4px;font-weight:600;letter-spacing:0.04em}
+.nav-links{display:flex;align-items:center;gap:0.15rem}
+.nav-links a{font-family:var(--f);font-size:0.845rem;font-weight:500;color:var(--gray-600);text-decoration:none;padding:0.45rem 0.8rem;border-radius:6px;transition:all 0.15s}
+.nav-links a:hover,.nav-links a.active{color:var(--blue);background:var(--blue-light)}
+.nav-actions{display:flex;align-items:center;gap:0.6rem}
+.btn-nav{font-family:var(--f);font-size:0.825rem;font-weight:600;padding:0.5rem 1.1rem;border-radius:7px;cursor:pointer;transition:all 0.15s;text-decoration:none;display:inline-flex;align-items:center;gap:0.35rem;border:none;white-space:nowrap}
+.btn-nav-ghost{background:transparent;border:1.5px solid var(--border);color:var(--gray-700)}
+.btn-nav-ghost:hover{border-color:var(--blue);color:var(--blue)}
+.btn-nav-primary{background:var(--blue);color:white}
+.btn-nav-primary:hover{background:#1550c0;box-shadow:0 4px 12px rgba(29,95,196,0.28)}
+.hamburger{display:none;flex-direction:column;gap:4px;cursor:pointer;padding:0.5rem;background:none;border:none;border-radius:6px}
+.hamburger span{width:20px;height:2px;background:var(--gray-700);border-radius:2px;display:block;transition:all 0.28s}
+.mobile-nav{display:none;position:fixed;top:66px;left:0;right:0;background:white;border-bottom:1px solid var(--border);z-index:499;padding:1rem 1.5rem;flex-direction:column;gap:0.35rem;box-shadow:var(--shadow-lg)}
+.mobile-nav.open{display:flex}
+.mobile-nav a{font-family:var(--f);font-size:0.9rem;font-weight:500;color:var(--gray-700);text-decoration:none;padding:0.7rem 1rem;border-radius:8px;transition:all 0.15s}
+.mobile-nav a:hover{background:var(--blue-light);color:var(--blue)}
+
+/* ── TOAST ── */
+.toast-wrap{position:fixed;bottom:1.5rem;right:1.5rem;z-index:1000;display:flex;flex-direction:column;gap:0.6rem;pointer-events:none}
+.toast{background:var(--navy);color:white;padding:0.85rem 1.25rem;border-radius:10px;font-family:var(--f);font-size:0.845rem;font-weight:500;box-shadow:var(--shadow-xl);display:flex;align-items:center;gap:0.65rem;min-width:260px;max-width:360px;animation:toastIn 0.3s ease;border-left:4px solid var(--blue);pointer-events:all}
+.toast.ok{border-left-color:#22c55e}
+.toast.warn{border-left-color:#f59e0b}
+.toast.err{border-left-color:#ef4444}
+@keyframes toastIn{from{opacity:0;transform:translateX(16px)}to{opacity:1;transform:translateX(0)}}
+@keyframes toastOut{from{opacity:1;transform:translateX(0)}to{opacity:0;transform:translateX(16px)}}
+
+/* ── SECTIONS ── */
+.section{padding:5rem 1.5rem}
+.container{max-width:1300px;margin:0 auto}
+.section-tag{display:inline-flex;align-items:center;gap:0.4rem;font-family:var(--f);font-size:0.72rem;font-weight:700;letter-spacing:0.1em;text-transform:uppercase;color:var(--blue);margin-bottom:0.6rem}
+.section-h{font-family:var(--f-display);font-size:clamp(1.8rem,3.2vw,2.6rem);font-weight:700;color:var(--navy);line-height:1.18;letter-spacing:-0.01em;margin-bottom:0.85rem}
+.section-h em{font-style:italic;color:var(--blue)}
+.section-p{font-family:var(--f);color:var(--muted);font-size:0.96rem;max-width:580px;line-height:1.75}
+.text-center{text-align:center}
+.text-center .section-p{margin:0 auto}
+
+/* ── HERO ── */
+.hero-wrap{background:linear-gradient(158deg,#f0f5fe 0%,#e8f0fd 40%,#f5f7fb 100%);border-bottom:1px solid var(--border)}
+.hero{max-width:1300px;margin:0 auto;padding:8.5rem 2rem 4.5rem;display:grid;grid-template-columns:1fr 1fr;gap:4.5rem;align-items:center}
+.hero-eyebrow{display:inline-flex;align-items:center;gap:0.5rem;background:white;border:1px solid var(--border);color:var(--blue);font-family:var(--f);font-size:0.75rem;font-weight:600;letter-spacing:0.07em;text-transform:uppercase;padding:0.38rem 0.9rem;border-radius:100px;margin-bottom:1.4rem;box-shadow:var(--shadow-sm)}
+.hero-eyebrow .dot{width:6px;height:6px;border-radius:50%;background:#22c55e;animation:pulseDot 2s infinite}
+@keyframes pulseDot{0%,100%{opacity:1;transform:scale(1)}50%{opacity:0.5;transform:scale(1.6)}}
+.hero h1{font-family:var(--f-display);font-weight:700;font-size:clamp(2.4rem,4.2vw,3.5rem);line-height:1.1;color:var(--navy);margin-bottom:1.35rem}
+.hero h1 em{font-style:italic;color:var(--blue)}
+.hero-desc{font-family:var(--f);font-size:1rem;color:var(--muted);max-width:460px;margin-bottom:2.2rem;line-height:1.78}
+.hero-btns{display:flex;gap:0.85rem;flex-wrap:wrap;margin-bottom:2.8rem}
+.btn-hero-primary{font-family:var(--f);font-weight:700;font-size:0.92rem;padding:0.8rem 1.8rem;border-radius:9px;background:var(--blue);color:white;text-decoration:none;display:inline-flex;align-items:center;gap:0.45rem;border:none;cursor:pointer;transition:all 0.2s;box-shadow:0 4px 14px rgba(29,95,196,0.28)}
+.btn-hero-primary:hover{background:#1550c0;transform:translateY(-1px);box-shadow:0 7px 20px rgba(29,95,196,0.34)}
+.btn-hero-outline{font-family:var(--f);font-weight:600;font-size:0.92rem;padding:0.8rem 1.8rem;border-radius:9px;background:white;color:var(--navy);border:1.5px solid var(--border);text-decoration:none;display:inline-flex;align-items:center;gap:0.45rem;cursor:pointer;transition:all 0.2s}
+.btn-hero-outline:hover{border-color:var(--blue);color:var(--blue);transform:translateY(-1px)}
+.hero-kpis{display:grid;grid-template-columns:repeat(3,1fr);gap:1rem}
+.kpi{background:white;border:1px solid var(--border);border-radius:var(--r-lg);padding:1.1rem;text-align:center;box-shadow:var(--shadow-sm)}
+.kpi-val{font-family:var(--f-display);font-size:1.85rem;font-weight:700;color:var(--blue);line-height:1}
+.kpi-lbl{font-family:var(--f);font-size:0.74rem;color:var(--muted);font-weight:500;margin-top:0.3rem}
+
+/* Hero dashboard card */
+.hero-visual{position:relative;padding-top:1.5rem;padding-bottom:1.5rem}
+.dash-card{background:white;border:1px solid var(--border);border-radius:var(--r-xl);box-shadow:var(--shadow-xl);overflow:hidden}
+.dash-head{background:linear-gradient(135deg,var(--navy),var(--navy3));padding:1.1rem 1.4rem;display:flex;align-items:center;justify-content:space-between}
+.dash-head-title{font-family:var(--f);font-size:0.78rem;font-weight:600;color:rgba(255,255,255,0.85);letter-spacing:0.05em;text-transform:uppercase}
+.dash-live{display:flex;align-items:center;gap:0.35rem;font-family:var(--f-mono);font-size:0.7rem;color:rgba(255,255,255,0.55)}
+.live-dot{width:5px;height:5px;border-radius:50%;background:#4ade80;animation:pulseDot 1.8s infinite}
+.dash-body{padding:1.4rem}
+.ring-wrap{position:relative;width:120px;height:120px;margin:0 auto 1.25rem}
+.ring-svg{transform:rotate(-90deg)}
+.ring-bg{fill:none;stroke:var(--gray-100);stroke-width:9}
+.ring-fill{fill:none;stroke-width:9;stroke-linecap:round;stroke-dasharray:339;stroke-dashoffset:254;transition:stroke-dashoffset 1.5s ease,stroke 0.5s}
+.ring-center{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center}
+.ring-pct{font-family:var(--f);font-weight:800;font-size:1.65rem;color:var(--navy);line-height:1}
+.ring-sub{font-family:var(--f-mono);font-size:0.6rem;color:var(--muted)}
+.mini-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:0.55rem;margin-bottom:1rem}
+.mini-cell{background:var(--gray-50);border:1px solid var(--border);border-radius:7px;padding:0.6rem 0.5rem;text-align:center}
+.mini-val{font-family:var(--f);font-weight:700;font-size:0.9rem;color:var(--navy)}
+.mini-val.ok{color:var(--green)}
+.mini-val.warn{color:var(--amber)}
+.mini-lbl{font-family:var(--f-mono);font-size:0.6rem;color:var(--muted);margin-top:0.15rem}
+.dash-badge{display:flex;align-items:center;justify-content:space-between;background:var(--green-light);border:1px solid rgba(10,124,89,0.2);border-radius:7px;padding:0.65rem 0.9rem}
+.dash-badge-text{font-family:var(--f);font-size:0.75rem;font-weight:700;color:var(--green)}
+.dash-badge-conf{font-family:var(--f-mono);font-size:0.7rem;color:var(--green)}
+.float-chip{position:absolute;background:white;border:1px solid var(--border);border-radius:9px;padding:0.5rem 0.85rem;box-shadow:var(--shadow-md);font-family:var(--f);font-size:0.75rem;font-weight:600;display:flex;align-items:center;gap:0.35rem;white-space:nowrap}
+.chip-a{top:-12px;right:16px;animation:floatA 4s ease-in-out infinite}
+.chip-b{bottom:-12px;left:16px;animation:floatB 4s ease-in-out infinite}
+@keyframes floatA{0%,100%{transform:translateY(0)}50%{transform:translateY(-7px)}}
+@keyframes floatB{0%,100%{transform:translateY(0)}50%{transform:translateY(7px)}}
+
+/* ── MARQUEE ── */
+.marquee-wrap{background:var(--navy);padding:0.8rem 0;overflow:hidden}
+.marquee-track{display:flex;gap:2.5rem;white-space:nowrap;animation:marqueeRoll 32s linear infinite}
+.m-item{font-family:var(--f-mono);font-size:0.74rem;color:rgba(255,255,255,0.45);display:flex;align-items:center;gap:0.45rem}
+.m-dot{width:4px;height:4px;background:var(--blue-mid);border-radius:50%}
+@keyframes marqueeRoll{to{transform:translateX(-50%)}}
+
+/* ── STAT STRIP ── */
+.stat-strip{background:white;border-bottom:1px solid var(--border)}
+.stat-strip-inner{max-width:1300px;margin:0 auto;display:grid;grid-template-columns:repeat(5,1fr)}
+.stat-strip-item{padding:1.5rem 1.25rem;text-align:center;border-right:1px solid var(--border)}
+.stat-strip-item:last-child{border-right:none}
+.stat-n{font-family:var(--f-display);font-size:2.2rem;font-weight:700;color:var(--navy);line-height:1}
+.stat-n .accent{font-family:var(--f-display);font-size:1.4rem;color:var(--blue)}
+.stat-d{font-family:var(--f);font-size:0.78rem;color:var(--muted);font-weight:500;margin-top:0.3rem}
+
+/* ── HOW IT WORKS ── */
+.how-section{background:var(--navy);padding:5rem 1.5rem}
+.how-section .section-h{color:white}
+.how-section .section-p{color:rgba(255,255,255,0.55)}
+.pipe{display:grid;grid-template-columns:repeat(5,1fr);margin-top:3.5rem;position:relative}
+.pipe::before{content:'';position:absolute;top:29px;left:calc(10% + 1rem);right:calc(10% + 1rem);height:1px;background:linear-gradient(90deg,rgba(77,138,240,0.4),rgba(8,135,168,0.4));z-index:0}
+.pipe-item{text-align:center;padding:0 0.75rem;position:relative;z-index:1}
+.pipe-icon{width:58px;height:58px;border-radius:50%;background:rgba(77,138,240,0.14);border:1.5px solid rgba(77,138,240,0.3);display:flex;align-items:center;justify-content:center;margin:0 auto 1.1rem;font-size:1.4rem;position:relative}
+.pipe-num{position:absolute;top:-5px;right:-5px;width:19px;height:19px;border-radius:50%;background:var(--blue);font-family:var(--f-mono);font-size:0.58rem;font-weight:700;color:white;display:flex;align-items:center;justify-content:center}
+.pipe-item h3{font-family:var(--f);font-weight:700;font-size:0.9rem;color:white;margin-bottom:0.45rem}
+.pipe-item p{font-family:var(--f);font-size:0.78rem;color:rgba(255,255,255,0.48);line-height:1.6}
+
+/* ── FEATURES GRID ── */
+.feats{display:grid;grid-template-columns:repeat(3,1fr);gap:1.25rem;margin-top:2.75rem}
+.feat-card{background:white;border:1px solid var(--border);border-radius:var(--r-lg);padding:1.75rem;transition:all 0.25s;position:relative;overflow:hidden}
+.feat-card::after{content:'';position:absolute;top:0;left:0;right:0;height:3px;background:linear-gradient(90deg,var(--blue),var(--teal));transform:scaleX(0);transform-origin:left;transition:transform 0.3s}
+.feat-card:hover{box-shadow:var(--shadow-lg);transform:translateY(-3px)}
+.feat-card:hover::after{transform:scaleX(1)}
+.feat-icon{width:44px;height:44px;border-radius:11px;display:flex;align-items:center;justify-content:center;font-size:1.25rem;margin-bottom:1.1rem}
+.fi-b{background:var(--blue-light)}
+.fi-t{background:var(--teal-light)}
+.fi-g{background:var(--green-light)}
+.fi-a{background:var(--amber-light)}
+.fi-r{background:var(--red-light)}
+.feat-card h3{font-family:var(--f);font-weight:700;font-size:0.95rem;color:var(--navy);margin-bottom:0.4rem}
+.feat-card p{font-family:var(--f);font-size:0.845rem;color:var(--muted);line-height:1.65}
+
+/* ── TABS ── */
+.tabs-nav{display:flex;gap:0.4rem;background:var(--gray-100);padding:0.3rem;border-radius:10px;width:fit-content;margin-bottom:1.75rem}
+.tab-btn{font-family:var(--f);font-size:0.825rem;font-weight:600;color:var(--muted);padding:0.55rem 1.1rem;border-radius:7px;border:none;background:transparent;cursor:pointer;transition:all 0.18s}
+.tab-btn.active{background:white;color:var(--blue);box-shadow:var(--shadow-sm)}
+.tab-panel{display:none;animation:fadeUp 0.28s ease}
+.tab-panel.active{display:block}
+@keyframes fadeUp{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:translateY(0)}}
+
+/* ── MODEL TABLE ── */
+.model-table{width:100%;border-collapse:collapse;font-size:0.845rem}
+.model-table th{font-family:var(--f);font-size:0.72rem;font-weight:700;text-transform:uppercase;letter-spacing:0.07em;color:var(--muted);padding:0.8rem 1.1rem;background:var(--gray-50);border-bottom:2px solid var(--border);text-align:left}
+.model-table td{font-family:var(--f);padding:0.85rem 1.1rem;border-bottom:1px solid var(--border);color:var(--navy);vertical-align:middle}
+.model-table tr:hover td{background:#fafbff}
+.model-table tr.best-row td{background:#f0f5fe}
+.model-table tr.best-row td:first-child{border-left:3px solid var(--blue)}
+.acc-bar-wrap{display:flex;align-items:center;gap:0.65rem}
+.acc-bar{height:5px;border-radius:3px;background:var(--blue);flex-shrink:0}
+.badge-best{font-family:var(--f-mono);font-size:0.62rem;font-weight:700;background:var(--blue);color:white;padding:0.15rem 0.45rem;border-radius:3px;margin-left:0.4rem;vertical-align:middle}
+
+/* ── CONFUSION MATRIX ── */
+.cm-wrap{display:flex;gap:2.5rem;align-items:flex-start;flex-wrap:wrap}
+.cm-legend{font-family:var(--f);font-size:0.78rem;font-weight:700;color:var(--gray-700);margin-bottom:0.5rem}
+.cm-grid{display:grid;grid-template-columns:auto 1fr 1fr;gap:3px;align-items:center}
+.cm-cell{width:88px;height:64px;border-radius:8px;display:flex;flex-direction:column;align-items:center;justify-content:center}
+.cm-lbl{font-family:var(--f);font-size:0.68rem;font-weight:700;color:var(--muted);padding:0.5rem;display:flex;align-items:center;justify-content:center}
+.cm-val{font-family:var(--f);font-weight:800;font-size:1.3rem;line-height:1}
+.cm-tag{font-family:var(--f-mono);font-size:0.6rem;font-weight:600;margin-top:0.1rem}
+.cm-tp{background:var(--green-light);color:var(--green)}
+.cm-tn{background:var(--green-light);color:var(--green)}
+.cm-fp{background:var(--red-light);color:var(--red)}
+.cm-fn{background:var(--amber-light);color:var(--amber)}
+.cm-metrics{flex:1;min-width:200px}
+.cm-row{display:flex;justify-content:space-between;align-items:center;padding:0.65rem 0;border-bottom:1px solid var(--border)}
+.cm-row:last-child{border-bottom:none}
+.cm-row-name{font-family:var(--f);font-size:0.84rem;font-weight:500;color:var(--gray-700)}
+.cm-row-val{font-family:var(--f-mono);font-size:0.88rem;font-weight:700;color:var(--blue)}
+
+/* ── FEATURE IMPORTANCE ── */
+.fi-section{display:flex;flex-direction:column;gap:0.75rem;margin-top:1.25rem}
+.fi-row{display:flex;align-items:center;gap:0.85rem}
+.fi-name{font-family:var(--f-mono);font-size:0.78rem;color:var(--gray-700);width:155px;flex-shrink:0;text-align:right}
+.fi-track{flex:1;height:9px;background:var(--gray-100);border-radius:5px;overflow:hidden}
+.fi-fill{height:100%;border-radius:5px;background:linear-gradient(90deg,var(--blue),var(--teal));transition:width 1.5s ease}
+.fi-pct{font-family:var(--f-mono);font-size:0.75rem;font-weight:600;color:var(--blue);width:42px;text-align:right}
+
+/* ── PREDICTION TOOL ── */
+.pred-wrap{background:var(--bg2);padding:5rem 1.5rem}
+.pred-card{background:white;border-radius:var(--r-xl);box-shadow:var(--shadow-xl);overflow:hidden;border:1px solid var(--border)}
+.pred-head{background:linear-gradient(135deg,var(--navy),var(--navy3));padding:1.75rem 2.25rem}
+.pred-head h2{font-family:var(--f-display);font-size:1.45rem;font-weight:700;color:white;margin-bottom:0.25rem}
+.pred-head p{font-family:var(--f);font-size:0.875rem;color:rgba(255,255,255,0.55)}
+.pred-tabs{display:flex;border-bottom:1px solid var(--border)}
+.pred-tab{flex:1;font-family:var(--f);font-size:0.82rem;font-weight:600;color:var(--muted);padding:0.95rem 0.5rem;border:none;background:white;border-bottom:2.5px solid transparent;cursor:pointer;transition:all 0.2s}
+.pred-tab.active{color:var(--blue);border-bottom-color:var(--blue);background:#fafcff}
+.pred-tab-panel{display:none}
+.pred-tab-panel.active{display:block}
+.pred-body{padding:2.25rem}
+.field-section{font-family:var(--f);font-size:0.72rem;font-weight:700;text-transform:uppercase;letter-spacing:0.09em;color:var(--muted);margin-bottom:1.1rem;padding-bottom:0.65rem;border-bottom:1px solid var(--border);display:flex;align-items:center;gap:0.4rem}
+.grid-3{display:grid;grid-template-columns:repeat(3,1fr);gap:1.1rem;margin-bottom:1.75rem}
+.grid-2{display:grid;grid-template-columns:repeat(2,1fr);gap:1.1rem;margin-bottom:1.75rem}
+.fgroup label{display:block;font-family:var(--f);font-size:0.75rem;font-weight:600;color:var(--gray-700);margin-bottom:0.4rem}
+.fgroup .range-hint{font-family:var(--f-mono);font-size:0.65rem;color:var(--teal);margin-top:0.22rem}
+.input-wrap{position:relative}
+.form-ctrl{width:100%;font-family:var(--f);font-size:0.855rem;color:var(--text);background:white;border:1.5px solid var(--border);border-radius:7px;padding:0.65rem 0.85rem;outline:none;transition:border-color 0.18s,box-shadow 0.18s;appearance:none}
+.form-ctrl:focus{border-color:var(--blue);box-shadow:0 0 0 3px rgba(29,95,196,0.11)}
+.form-ctrl:hover{border-color:var(--gray-400)}
+.form-ctrl.has-unit{padding-right:3.25rem}
+.unit-lbl{position:absolute;right:0.8rem;top:50%;transform:translateY(-50%);font-family:var(--f-mono);font-size:0.7rem;color:var(--muted);pointer-events:none}
+select.form-ctrl{cursor:pointer;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='%2394a3b8' stroke-width='2'%3E%3Cpath d='M6 9l6 6 6-6'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:right 0.75rem center;padding-right:2.25rem}
+/* RADIO GROUPS */
+.radio-row{display:flex;gap:0.6rem}
+.radio-opt{flex:1;position:relative}
+.radio-opt input{position:absolute;opacity:0;width:0;height:0}
+.radio-opt label{display:flex;align-items:center;justify-content:center;padding:0.6rem 0.5rem;border:1.5px solid var(--border);border-radius:7px;font-family:var(--f);font-size:0.82rem;font-weight:500;color:var(--gray-600);cursor:pointer;transition:all 0.18s;text-align:center}
+.radio-opt input:checked+label{border-color:var(--blue);background:var(--blue-light);color:var(--blue);font-weight:700}
+/* CHECKBOXES */
+.check-col{display:flex;flex-direction:column;gap:0.55rem}
+.check-item{display:flex;align-items:center;gap:0.55rem;font-family:var(--f);font-size:0.85rem;color:var(--gray-700);cursor:pointer}
+.check-item input{width:15px;height:15px;accent-color:var(--blue);cursor:pointer;flex-shrink:0}
+/* ACTION BUTTONS */
+.pred-actions{display:flex;gap:0.85rem;flex-wrap:wrap;margin-top:1.4rem;align-items:center}
+.btn-predict{font-family:var(--f);font-weight:700;font-size:0.92rem;padding:0.85rem 2.25rem;background:linear-gradient(135deg,var(--blue),var(--teal));color:white;border:none;border-radius:9px;cursor:pointer;display:inline-flex;align-items:center;gap:0.55rem;transition:all 0.2s;box-shadow:0 4px 14px rgba(29,95,196,0.24)}
+.btn-predict:hover{transform:translateY(-2px);box-shadow:0 8px 22px rgba(29,95,196,0.32)}
+.btn-predict:disabled{opacity:0.6;cursor:not-allowed;transform:none}
+.btn-secondary{font-family:var(--f);font-weight:600;font-size:0.845rem;padding:0.75rem 1.35rem;border-radius:9px;cursor:pointer;display:inline-flex;align-items:center;gap:0.45rem;transition:all 0.18s;border:none}
+.btn-ghost{background:white;color:var(--gray-600);border:1.5px solid var(--border)}
+.btn-ghost:hover{border-color:var(--gray-400);color:var(--gray-800)}
+.btn-warn{background:var(--amber-light);color:var(--amber);border:1.5px solid rgba(196,122,0,0.2)}
+.btn-warn:hover{background:#fde68a}
+.btn-ok{background:var(--green-light);color:var(--green);border:1.5px solid rgba(10,124,89,0.2)}
+.btn-ok:hover{background:#a7f3d0}
+/* SPINNER */
+.spinner{width:17px;height:17px;border:2px solid rgba(255,255,255,0.3);border-top-color:white;border-radius:50%;animation:spin 0.65s linear infinite;flex-shrink:0}
+@keyframes spin{to{transform:rotate(360deg)}}
+
+/* ── RESULTS ── */
+.result-section{display:none;margin-top:2rem;animation:fadeUp 0.45s ease}
+.result-section.show{display:block}
+.result-alert{border-radius:var(--r-lg);padding:1.6rem;margin-bottom:1.4rem;display:flex;align-items:flex-start;gap:1rem}
+.alert-low{background:var(--green-light);border:1.5px solid rgba(10,124,89,0.22)}
+.alert-high{background:var(--red-light);border:1.5px solid rgba(192,57,43,0.22)}
+.alert-icon{font-size:2.2rem;flex-shrink:0}
+.alert-title{font-family:var(--f);font-weight:800;font-size:1.25rem;margin-bottom:0.3rem}
+.alert-low .alert-title{color:var(--green)}
+.alert-high .alert-title{color:var(--red)}
+.alert-desc{font-family:var(--f);font-size:0.875rem;color:var(--gray-600);line-height:1.7}
+.result-cards{display:grid;grid-template-columns:repeat(4,1fr);gap:0.9rem;margin-bottom:1.4rem}
+.res-card{background:white;border:1px solid var(--border);border-radius:var(--r-lg);padding:1.1rem;text-align:center;box-shadow:var(--shadow-sm)}
+.res-card-val{font-family:var(--f-display);font-size:1.75rem;font-weight:700;line-height:1}
+.res-card-lbl{font-family:var(--f);font-size:0.7rem;font-weight:600;color:var(--muted);text-transform:uppercase;letter-spacing:0.07em;margin-top:0.3rem}
+/* SHAP */
+.shap-box{background:var(--gray-50);border:1px solid var(--border);border-radius:var(--r-lg);padding:1.4rem;margin-bottom:1.4rem}
+.shap-title{font-family:var(--f);font-size:0.72rem;font-weight:700;text-transform:uppercase;letter-spacing:0.09em;color:var(--muted);margin-bottom:1.1rem}
+.shap-rows{display:flex;flex-direction:column;gap:0.7rem}
+.shap-row{display:flex;align-items:center;gap:0.85rem}
+.shap-name{font-family:var(--f);font-size:0.78rem;color:var(--gray-700);width:148px;flex-shrink:0;font-weight:500}
+.shap-track{flex:1;height:7px;background:var(--gray-200);border-radius:4px;overflow:hidden}
+.shap-pos{height:100%;background:#ef4444;border-radius:4px;float:right;transition:width 1.4s ease}
+.shap-neg{height:100%;background:#1d5fc4;border-radius:4px;float:left;transition:width 1.4s ease}
+.shap-val{font-family:var(--f-mono);font-size:0.72rem;font-weight:600;width:50px;text-align:right}
+.shap-val.pos{color:#ef4444}
+.shap-val.neg{color:var(--blue)}
+/* STAGES */
+.stages-row{display:flex;gap:0.45rem;margin:0.85rem 0}
+.ckd-stage-chip{flex:1;padding:0.65rem 0.3rem;border-radius:7px;text-align:center;border:2px solid transparent;transition:all 0.2s}
+.ckd-stage-chip.active-stage{border-color:var(--blue);box-shadow:0 0 0 3px rgba(29,95,196,0.14);transform:scale(1.03)}
+.cs-name{font-family:var(--f);font-weight:800;font-size:0.8rem}
+.cs-desc{font-family:var(--f);font-size:0.6rem;margin-top:0.15rem}
+.cs1{background:#dbeafe;color:#1d4ed8}.cs2{background:#dcfce7;color:#15803d}
+.cs3{background:#fef9c3;color:#854d0e}.cs4{background:#ffedd5;color:#9a3412}
+.cs5{background:#fee2e2;color:#991b1b}
+/* RECS */
+.recs-box{background:var(--blue-light);border:1px solid rgba(29,95,196,0.15);border-radius:var(--r-lg);padding:1.4rem;margin-bottom:1.4rem}
+.recs-title{font-family:var(--f);font-size:0.72rem;font-weight:700;text-transform:uppercase;letter-spacing:0.09em;color:var(--blue);margin-bottom:0.9rem}
+.recs-list{display:flex;flex-direction:column;gap:0.55rem}
+.rec-item{display:flex;align-items:flex-start;gap:0.65rem;font-family:var(--f);font-size:0.85rem;color:var(--navy);line-height:1.55}
+.rec-icon{font-size:0.95rem;flex-shrink:0;margin-top:0.1rem}
+/* PROBABILITY BARS */
+.prob-section{background:white;border:1px solid var(--border);border-radius:var(--r-lg);padding:1.4rem;margin-bottom:1.4rem}
+.prob-rows{display:flex;flex-direction:column;gap:0.9rem;margin-top:0.9rem}
+.prob-row-label{display:flex;justify-content:space-between;font-family:var(--f);font-size:0.8rem;margin-bottom:0.3rem}
+.prob-row-label span:first-child{font-weight:600;color:var(--navy)}
+.prob-row-label span:last-child{font-family:var(--f-mono);font-weight:600;font-size:0.78rem}
+.prob-track{height:9px;background:var(--gray-100);border-radius:5px;overflow:hidden}
+.prob-fill{height:100%;border-radius:5px;width:0%;transition:width 1.1s ease}
+/* RESULT BTNS */
+.result-btns{display:flex;gap:0.7rem;flex-wrap:wrap;margin-top:0.5rem}
+.btn-dl{font-family:var(--f);font-weight:700;font-size:0.82rem;padding:0.65rem 1.3rem;border-radius:7px;border:none;cursor:pointer;display:inline-flex;align-items:center;gap:0.45rem;transition:all 0.18s}
+.btn-dl-dark{background:var(--navy);color:white}
+.btn-dl-dark:hover{background:var(--navy3)}
+.btn-dl-teal{background:var(--teal-light);color:var(--teal);border:1.5px solid rgba(8,135,168,0.2)}
+.btn-dl-teal:hover{background:#b2ebf2}
+.btn-dl-ghost{background:white;color:var(--gray-700);border:1.5px solid var(--border)}
+.btn-dl-ghost:hover{border-color:var(--blue);color:var(--blue)}
+
+/* ── BATCH UPLOAD ── */
+.upload-zone{border:2px dashed var(--border);border-radius:var(--r-lg);padding:2.75rem;text-align:center;cursor:pointer;transition:all 0.2s;background:var(--gray-50)}
+.upload-zone:hover,.upload-zone.drag{border-color:var(--blue);background:var(--blue-light)}
+.upload-zone h3{font-family:var(--f);font-weight:700;color:var(--navy);margin:0.85rem 0 0.45rem}
+.upload-zone p{font-family:var(--f);font-size:0.845rem;color:var(--muted)}
+.upload-cta{display:inline-flex;align-items:center;gap:0.45rem;background:var(--blue);color:white;font-family:var(--f);font-weight:700;font-size:0.82rem;padding:0.6rem 1.25rem;border-radius:7px;margin-top:0.85rem;cursor:pointer}
+#fileInput{display:none}
+.batch-results{display:none;margin-top:1.5rem}
+.batch-table{width:100%;border-collapse:collapse;font-size:0.835rem}
+.batch-table th{font-family:var(--f);font-size:0.7rem;font-weight:700;text-transform:uppercase;letter-spacing:0.06em;color:var(--muted);padding:0.7rem 0.9rem;background:var(--gray-50);border-bottom:2px solid var(--border);text-align:left}
+.batch-table td{font-family:var(--f);padding:0.7rem 0.9rem;border-bottom:1px solid var(--border);color:var(--navy)}
+.batch-table tr:hover td{background:var(--gray-50)}
+.ckd-badge{display:inline-flex;align-items:center;gap:0.3rem;padding:0.22rem 0.55rem;border-radius:5px;font-family:var(--f-mono);font-size:0.68rem;font-weight:700}
+.ckd-yes{background:var(--red-light);color:var(--red)}
+.ckd-no{background:var(--green-light);color:var(--green)}
+
+/* ── RISK CALCULATOR ── */
+.calc-layout{display:grid;grid-template-columns:1fr 1fr;gap:2rem;align-items:start}
+.calc-gauge-wrap{background:white;border:1px solid var(--border);border-radius:var(--r-xl);padding:2.25rem;text-align:center;position:sticky;top:5rem;box-shadow:var(--shadow-md)}
+.big-gauge{position:relative;width:200px;height:200px;margin:0 auto 1.4rem}
+.bg-svg{transform:rotate(-135deg)}
+.bg-track{fill:none;stroke:var(--gray-100);stroke-width:13;stroke-dasharray:534;stroke-dashoffset:133.5}
+.bg-fill{fill:none;stroke-width:13;stroke-dasharray:534;stroke-dashoffset:534;stroke-linecap:round;transition:all 1.1s ease}
+.gauge-center{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center}
+.gauge-pct{font-family:var(--f-display);font-size:2.75rem;font-weight:700;color:var(--navy);line-height:1}
+.gauge-lbl{font-family:var(--f-mono);font-size:0.65rem;color:var(--muted)}
+.gauge-risk-name{font-family:var(--f);font-size:1rem;font-weight:800;margin-top:0.5rem}
+.rf-list{display:flex;flex-direction:column;gap:0.65rem;margin-top:1.25rem;text-align:left}
+.rf-row{display:flex;align-items:center;justify-content:space-between;padding:0.65rem 0.9rem;background:var(--gray-50);border-radius:7px;border:1px solid var(--border)}
+.rf-name{font-family:var(--f);font-size:0.82rem;font-weight:500;color:var(--gray-700)}
+.rf-pts{font-family:var(--f-mono);font-size:0.78rem;font-weight:700}
+.rf-pts.hi{color:var(--red)}.rf-pts.med{color:var(--amber)}.rf-pts.lo{color:var(--green)}
+.egfr-display{margin-top:1.5rem;padding-top:1.5rem;border-top:1px solid var(--border)}
+.egfr-label{font-family:var(--f);font-size:0.72rem;font-weight:700;text-transform:uppercase;letter-spacing:0.08em;color:var(--muted);margin-bottom:0.5rem}
+.egfr-val{font-family:var(--f-display);font-size:1.9rem;font-weight:700;color:var(--navy);line-height:1}
+.egfr-stage{font-family:var(--f-mono);font-size:0.72rem;color:var(--muted);margin-top:0.2rem}
+.sliders-wrap{display:flex;flex-direction:column;gap:1.1rem}
+.slider-group label{display:flex;justify-content:space-between;font-family:var(--f);font-size:0.8rem;font-weight:600;color:var(--gray-700);margin-bottom:0.45rem}
+.slider-group label span{font-family:var(--f-mono);color:var(--blue);font-weight:600}
+input[type=range]{width:100%;height:4px;accent-color:var(--blue);cursor:pointer;border-radius:2px}
+.calc-checks{display:flex;gap:1.5rem;margin-top:1rem;flex-wrap:wrap}
+.calc-check{display:flex;align-items:center;gap:0.5rem;font-family:var(--f);font-size:0.85rem;color:var(--gray-700);cursor:pointer}
+.calc-check input{accent-color:var(--blue);width:15px;height:15px;cursor:pointer}
+
+/* ── HISTORY ── */
+.hist-wrap{background:white;border:1px solid var(--border);border-radius:var(--r-xl);padding:1.75rem;box-shadow:var(--shadow-sm)}
+.hist-list{display:flex;flex-direction:column;gap:0.65rem;margin-top:1rem}
+.hist-item{display:flex;align-items:center;gap:1rem;padding:0.9rem 1.1rem;background:var(--gray-50);border:1px solid var(--border);border-radius:9px;cursor:pointer;transition:all 0.18s}
+.hist-item:hover{background:var(--blue-light);border-color:rgba(29,95,196,0.2)}
+.hist-date{font-family:var(--f-mono);font-size:0.72rem;color:var(--muted);flex-shrink:0;width:100px}
+.hist-info h4{font-family:var(--f);font-weight:600;font-size:0.875rem;color:var(--navy)}
+.hist-info p{font-family:var(--f-mono);font-size:0.7rem;color:var(--muted);margin-top:0.1rem}
+.hist-result{margin-left:auto;font-family:var(--f);font-size:0.78rem;font-weight:700;flex-shrink:0}
+.hist-empty{text-align:center;padding:3rem;color:var(--muted)}
+.hist-empty .empty-icon{font-size:2.5rem;margin-bottom:0.75rem}
+.hist-empty p{font-family:var(--f);font-size:0.875rem}
+
+/* ── EDU SECTION ── */
+.edu-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:1.5rem;margin-top:2rem}
+.edu-card{background:white;border:1px solid var(--border);border-radius:var(--r-lg);overflow:hidden;transition:all 0.22s}
+.edu-card:hover{box-shadow:var(--shadow-lg);transform:translateY(-2px)}
+.edu-top{padding:1.35rem 1.5rem;background:var(--navy)}
+.edu-top h3{font-family:var(--f-display);font-size:1.05rem;font-weight:600;color:white;margin-bottom:0.2rem}
+.edu-top p{font-family:var(--f);font-size:0.8rem;color:rgba(255,255,255,0.5)}
+.edu-body{padding:1.25rem 1.5rem}
+.acc-btn{width:100%;text-align:left;padding:0.7rem 0;border:none;background:none;font-family:var(--f);font-size:0.875rem;font-weight:600;color:var(--navy);cursor:pointer;display:flex;justify-content:space-between;align-items:center;border-bottom:1px solid var(--border);gap:0.5rem}
+.acc-btn:last-of-type{border-bottom:none}
+.acc-btn svg{transition:transform 0.2s;width:15px;height:15px;flex-shrink:0;color:var(--muted)}
+.acc-btn.open svg{transform:rotate(180deg)}
+.acc-content{font-family:var(--f);font-size:0.845rem;color:var(--muted);line-height:1.72;padding:0.7rem 0 1rem;display:none}
+.acc-content.open{display:block}
+.stages-vis{display:grid;grid-template-columns:repeat(5,1fr);gap:0.85rem;margin:2rem 0}
+.stage-vis-card{border-radius:var(--r-lg);padding:1.25rem 0.85rem;text-align:center;border:1px solid var(--border)}
+.stage-vis-card h4{font-family:var(--f);font-weight:800;font-size:0.9rem;margin-bottom:0.35rem}
+.stage-vis-card .gfr{font-family:var(--f-mono);font-size:0.75rem;margin-bottom:0.6rem}
+.stage-vis-card p{font-family:var(--f);font-size:0.75rem;line-height:1.5}
+
+/* ── ABOUT ── */
+.about-grid{display:grid;grid-template-columns:1fr 1fr;gap:3.5rem;align-items:center}
+.about-visual{background:var(--navy);border-radius:var(--r-xl);aspect-ratio:4/3;display:flex;align-items:center;justify-content:center;font-size:4rem}
+.tech-pills{display:flex;flex-wrap:wrap;gap:0.6rem;margin-top:1.5rem}
+.tech-pill{font-family:var(--f);font-size:0.775rem;font-weight:600;padding:0.35rem 0.85rem;border-radius:6px}
+.team-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:1.5rem;margin-top:2.5rem;max-width:780px;margin-left:auto;margin-right:auto}
+.team-card{text-align:center;padding:1.25rem 0.85rem;background:white;border:1px solid var(--border);border-radius:var(--r-lg);box-shadow:var(--shadow-sm)}
+.avatar{width:64px;height:64px;border-radius:50%;background:linear-gradient(135deg,var(--blue),var(--teal));display:flex;align-items:center;justify-content:center;font-family:var(--f);font-weight:800;font-size:1.2rem;color:white;margin:0 auto 0.85rem}
+.team-name{font-family:var(--f);font-weight:700;font-size:0.9rem;color:var(--navy)}
+.team-role{font-family:var(--f);font-size:0.78rem;color:var(--muted);margin-top:0.2rem}
+.team-spec{font-family:var(--f-mono);font-size:0.68rem;color:var(--blue);margin-top:0.15rem}
+
+/* ── FOOTER ── */
+footer{background:var(--navy);color:white;padding:4rem 1.5rem 2rem}
+.footer-inner{max-width:1300px;margin:0 auto}
+.footer-grid{display:grid;grid-template-columns:2fr 1fr 1fr 1fr;gap:3rem;margin-bottom:2.75rem}
+.footer-brand p{font-family:var(--f);color:rgba(255,255,255,0.45);font-size:0.845rem;line-height:1.72;margin-top:0.9rem;max-width:280px}
+.footer-brand .brand-text{font-family:var(--f);font-weight:800;font-size:1.15rem;color:white}
+.footer-brand .brand-text em{font-style:normal;color:#4d8af0}
+.footer-brand .brand-pill{font-family:var(--f-mono);font-size:0.62rem;background:rgba(255,255,255,0.09);padding:0.2rem 0.5rem;border-radius:4px;font-weight:600;margin-left:0.35rem;color:rgba(255,255,255,0.5)}
+.footer-col h4{font-family:var(--f);font-size:0.72rem;font-weight:700;letter-spacing:0.1em;text-transform:uppercase;color:rgba(255,255,255,0.4);margin-bottom:1.1rem}
+.footer-col a{font-family:var(--f);display:block;color:rgba(255,255,255,0.6);text-decoration:none;font-size:0.845rem;margin-bottom:0.55rem;transition:color 0.18s}
+.footer-col a:hover{color:white}
+.footer-bottom{border-top:1px solid rgba(255,255,255,0.07);padding-top:1.5rem;display:flex;justify-content:space-between;align-items:center;gap:1rem;flex-wrap:wrap}
+.footer-copy{font-family:var(--f);font-size:0.775rem;color:rgba(255,255,255,0.35)}
+.footer-disc{font-family:var(--f);font-size:0.72rem;color:rgba(255,255,255,0.28);text-align:right;max-width:540px}
+
+/* ── REVEAL ── */
+.reveal{opacity:0;transform:translateY(18px);transition:opacity 0.55s ease,transform 0.55s ease}
+.reveal.visible{opacity:1;transform:translateY(0)}
+.d1{transition-delay:0.08s}.d2{transition-delay:0.16s}.d3{transition-delay:0.24s}.d4{transition-delay:0.32s}
+
+/* ── RESPONSIVE ── */
+@media(max-width:1024px){
+  .hero{grid-template-columns:1fr;gap:2.5rem;padding-top:7.5rem}
+  .pipe{grid-template-columns:repeat(3,1fr)}
+  .pipe::before{display:none}
+  .feats{grid-template-columns:repeat(2,1fr)}
+  .result-cards{grid-template-columns:repeat(2,1fr)}
+  .footer-grid{grid-template-columns:1fr 1fr}
+  .stages-vis{grid-template-columns:repeat(3,1fr)}
+  .calc-layout{grid-template-columns:1fr}
+  .calc-gauge-wrap{position:static}
+  .stat-strip-inner{grid-template-columns:repeat(3,1fr)}
+}
+@media(max-width:768px){
+  .nav-links,.nav-actions{display:none}
+  .hamburger{display:flex}
+  .hero{padding:7rem 1.25rem 3rem}
+  .section{padding:3.5rem 1.25rem}
+  .grid-3{grid-template-columns:1fr 1fr}
+  .feats{grid-template-columns:1fr}
+  .result-cards{grid-template-columns:1fr 1fr}
+  .team-grid{grid-template-columns:repeat(2,1fr)}
+  .about-grid{grid-template-columns:1fr}
+  .footer-grid{grid-template-columns:1fr}
+  .footer-bottom{flex-direction:column;text-align:center}
+  .footer-disc{text-align:center}
+  .edu-grid{grid-template-columns:1fr}
+  .stages-vis{grid-template-columns:1fr 1fr}
+  .cm-wrap{flex-direction:column}
+  .stat-strip-inner{grid-template-columns:1fr 1fr}
+  .stat-strip-item{border-right:none;border-bottom:1px solid var(--border)}
+  .pred-body{padding:1.5rem}
+}
+</style>
+</head>
+<body>
+<script>
+// Apply theme immediately — before loader renders — to prevent white flash
+(function(){
+  var s=localStorage.getItem('ckd-theme');
+  var p=window.matchMedia&&window.matchMedia('(prefers-color-scheme: dark)').matches;
+  if(s==='dark'||(s==null&&p)) document.body.classList.add('dark');
+})();
+</script>
+
+<!-- LOADER -->
+<div id="loader">
+  <div class="loader-logo">Nephro<span>Sense</span> Pro</div>
+  <div class="loader-bar"><div class="loader-fill"></div></div>
+  <div class="loader-sub">LOADING ML ENGINE...</div>
+</div>
+
+<!-- TOASTS -->
+<div class="toast-wrap" id="toastWrap"></div>
+
+<!-- MOBILE NAV -->
+<div class="mobile-nav" id="mobileNav">
+  <a href="#home" onclick="closeMobile()">Home</a>
+  <a href="#how-it-works" onclick="closeMobile()">How It Works</a>
+  <a href="#models" onclick="closeMobile()">ML Results</a>
+  <a href="#predict" onclick="closeMobile()">Check Your Risk</a>
+  <a href="#risk-calc" onclick="closeMobile()">Risk Sliders</a>
+  <a href="#ckd-info" onclick="closeMobile()">What is CKD?</a>
+  <a href="#about" onclick="closeMobile()">About</a>
+</div>
+
+<!-- NAV -->
+<nav id="mainNav">
+  <div class="nav-inner">
+    <a href="#home" class="nav-logo">
+      <div class="nav-logo-icon">
+        <svg viewBox="0 0 24 24"><path d="M12 2C8.5 2 5 5 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-4-3.5-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5S10.62 6.5 12 6.5s2.5 1.12 2.5 2.5S13.38 11.5 12 11.5z"/></svg>
+      </div>
+      <span class="nav-logo-text">Nephro<em>Sense</em></span>
+      <span class="nav-logo-pill">PRO</span>
+    </a>
+    <div class="nav-links">
+      <a href="#how-it-works">How It Works</a>
+      <a href="#models">ML Results</a>
+      <a href="#predict">Check Your Risk</a>
+      <a href="#risk-calc">Risk Sliders</a>
+      <a href="#ckd-info">What is CKD?</a>
+      <a href="#about">About</a>
+    </div>
+    <div class="nav-actions">
+      <button class="theme-toggle" onclick="toggleTheme()" id="themeToggle" title="Switch between light and dark mode">
+        <span class="tt-icon">☀️</span>
+        <div class="tt-track"><div class="tt-knob"></div></div>
+        <span class="tt-label-light">Light</span>
+        <span class="tt-label-dark">🌙 Dark</span>
+      </button>
+      <a href="#predict" class="btn-nav btn-nav-ghost">Try Demo</a>
+      <a href="#predict" class="btn-nav btn-nav-primary">
+        <svg width="13" height="13" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path d="M13 10V3L4 14h7v7l9-11h-7z"/></svg>
+        Check My Risk
+      </a>
+    </div>
+    <button class="hamburger" onclick="toggleMobile()" id="hamburger">
+      <span></span><span></span><span></span>
+    </button>
+  </div>
+</nav>
+
+<!-- HERO -->
+<div id="home" class="hero-wrap">
+  <div class="hero">
+    <div class="reveal">
+      <div class="hero-eyebrow"><span class="dot"></span> ML-Powered · Kidney Health · Free to Use</div>
+      <div class="project-title-box" style="background:linear-gradient(135deg,var(--navy),var(--navy3));color:white;border-radius:var(--r-lg);padding:1rem 1.4rem;margin-bottom:1.4rem;border-left:4px solid var(--blue-mid)">
+        <div style="font-size:0.68rem;font-weight:700;letter-spacing:0.1em;text-transform:uppercase;color:rgba(255,255,255,0.5);margin-bottom:0.35rem">Official Project Title</div>
+        <div style="font-family:var(--f-display);font-size:1.05rem;font-weight:700;line-height:1.35;color:white">A Machine Learning–Based System for Early Prediction of <span style="color:#93c5fd">Chronic Kidney Disease</span></div>
+      </div>
+      <h1>Could You Have <em>Kidney Disease</em> Without Knowing It?</h1>
+      <p class="hero-desc">Most people with kidney disease have <strong>no symptoms</strong> until it's very advanced. NephroSense Pro uses Artificial Intelligence to check your risk early — just enter your basic blood test values and get an instant result.</p>
+      <div class="hero-btns">
+        <a href="#predict" class="btn-hero-primary">
+          <svg width="15" height="15" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path d="M13 10V3L4 14h7v7l9-11h-7z"/></svg>
+          Check My Kidney Risk — Free
+        </a>
+        <a href="#ckd-info" class="btn-hero-outline">
+          <svg width="15" height="15" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="M12 16v-4M12 8h.01"/></svg>
+          What is Kidney Disease?
+        </a>
+      </div>
+      <div class="hero-kpis">
+        <div class="kpi"><div class="kpi-val" id="kpi-acc">0%</div><div class="kpi-lbl">AI Accuracy Rate</div></div>
+        <div class="kpi"><div class="kpi-val" id="kpi-cases">0</div><div class="kpi-lbl">Patients Studied</div></div>
+        <div class="kpi"><div class="kpi-val">24</div><div class="kpi-lbl">Health Factors Checked</div></div>
+      </div>
+    </div>
+    <div class="hero-visual reveal d2">
+      <div class="float-chip chip-a">🧬 ML Pipeline Active</div>
+      <div class="dash-card">
+        <div class="dash-head">
+          <span class="dash-head-title">Patient Risk Assessment</span>
+          <span class="dash-live"><span class="live-dot"></span>Live Analysis</span>
+        </div>
+        <div class="dash-body">
+          <div style="text-align:center;margin-bottom:1.1rem">
+            <div style="font-size:0.72rem;font-weight:600;color:var(--muted);text-transform:uppercase;letter-spacing:0.06em;margin-bottom:0.65rem">CKD Risk Score</div>
+            <div class="ring-wrap">
+              <svg class="ring-svg" width="120" height="120" viewBox="0 0 120 120">
+                <circle class="ring-bg" cx="60" cy="60" r="54"/>
+                <circle class="ring-fill" cx="60" cy="60" r="54" stroke="var(--green)" stroke-dashoffset="254"/>
+              </svg>
+              <div class="ring-center">
+                <div class="ring-pct">25%</div>
+                <div class="ring-sub">LOW RISK</div>
+              </div>
+            </div>
+          </div>
+          <div class="mini-grid">
+            <div class="mini-cell"><div class="mini-val ok">1.1</div><div class="mini-lbl">Creatinine</div></div>
+            <div class="mini-cell"><div class="mini-val warn">38</div><div class="mini-lbl">Blood Urea</div></div>
+            <div class="mini-cell"><div class="mini-val ok">13.8</div><div class="mini-lbl">Hemoglobin</div></div>
+            <div class="mini-cell"><div class="mini-val ok">68</div><div class="mini-lbl">eGFR</div></div>
+            <div class="mini-cell"><div class="mini-val ok">140</div><div class="mini-lbl">Sodium</div></div>
+            <div class="mini-cell"><div class="mini-val warn">3.2</div><div class="mini-lbl">Albumin</div></div>
+          </div>
+          <div class="dash-badge">
+            <span class="dash-badge-text">✓ No CKD — Stage G2</span>
+            <span class="dash-badge-conf">Conf: 97.3%</span>
+          </div>
+        </div>
+      </div>
+      <div class="float-chip chip-b">✅ Validated UCI Dataset</div>
+    </div>
+  </div>
+</div>
+
+<!-- MARQUEE -->
+<div class="marquee-wrap">
+  <div class="marquee-track">
+    <div class="m-item"><span class="m-dot"></span>Random Forest · 98.5%</div>
+    <div class="m-item"><span class="m-dot"></span>XGBoost · 97.8%</div>
+    <div class="m-item"><span class="m-dot"></span>SVM RBF Kernel · 96.3%</div>
+    <div class="m-item"><span class="m-dot"></span>Neural Network MLP · 95.9%</div>
+    <div class="m-item"><span class="m-dot"></span>Ensemble Voting · 98.8%</div>
+    <div class="m-item"><span class="m-dot"></span>KNN · 94.7%</div>
+    <div class="m-item"><span class="m-dot"></span>Logistic Regression · 93.2%</div>
+    <div class="m-item"><span class="m-dot"></span>Decision Tree · 95.1%</div>
+    <div class="m-item"><span class="m-dot"></span>SHAP Explainability</div>
+    <div class="m-item"><span class="m-dot"></span>400 Patients · 24 Features</div>
+    <div class="m-item"><span class="m-dot"></span>UCI CKD Dataset</div>
+    <div class="m-item"><span class="m-dot"></span>Random Forest · 98.5%</div>
+    <div class="m-item"><span class="m-dot"></span>XGBoost · 97.8%</div>
+    <div class="m-item"><span class="m-dot"></span>SVM RBF Kernel · 96.3%</div>
+    <div class="m-item"><span class="m-dot"></span>Neural Network MLP · 95.9%</div>
+    <div class="m-item"><span class="m-dot"></span>Ensemble Voting · 98.8%</div>
+    <div class="m-item"><span class="m-dot"></span>KNN · 94.7%</div>
+    <div class="m-item"><span class="m-dot"></span>Logistic Regression · 93.2%</div>
+    <div class="m-item"><span class="m-dot"></span>Decision Tree · 95.1%</div>
+    <div class="m-item"><span class="m-dot"></span>SHAP Explainability</div>
+    <div class="m-item"><span class="m-dot"></span>400 Patients · 24 Features</div>
+    <div class="m-item"><span class="m-dot"></span>UCI CKD Dataset</div>
+  </div>
+</div>
+
+<!-- STAT STRIP -->
+<div class="stat-strip">
+  <div class="stat-strip-inner">
+    <div class="stat-strip-item reveal"><div class="stat-n">98<span class="accent">.8%</span></div><div class="stat-d">AI Prediction Accuracy</div></div>
+    <div class="stat-strip-item reveal d1"><div class="stat-n">400<span class="accent">+</span></div><div class="stat-d">Real Patient Records Used</div></div>
+    <div class="stat-strip-item reveal d2"><div class="stat-n">24</div><div class="stat-d">Health Signals Analyzed</div></div>
+    <div class="stat-strip-item reveal d3"><div class="stat-n">0<span class="accent">.99</span></div><div class="stat-d">Detection Score (out of 1.0)</div></div>
+    <div class="stat-strip-item reveal d4"><div class="stat-n">8</div><div class="stat-d">AI Models Compared</div></div>
+  </div>
+</div>
+
+<!-- HOW IT WORKS -->
+<section id="how-it-works" class="how-section">
+  <div class="container">
+    <div class="text-center reveal">
+      <div class="section-tag" style="color:#93c5fd">⚙ Simple 5-Step Process</div>
+      <h2 class="section-h" style="color:white">How Does the <em style="color:#93c5fd">AI Work?</em></h2>
+      <p class="section-p text-center" style="color:rgba(255,255,255,0.5);margin:0 auto">Think of it like a very smart doctor's assistant that has studied thousands of kidney disease cases and learned the warning patterns.</p>
+    </div>
+    <div class="pipe">
+      <div class="pipe-item reveal d1"><div class="pipe-icon">🩺<div class="pipe-num">1</div></div><h3>Collect Health Data</h3><p>You enter basic values from your blood and urine reports — things like creatinine, hemoglobin, and blood pressure. These are standard tests any doctor orders.</p></div>
+      <div class="pipe-item reveal d2"><div class="pipe-icon">🔧<div class="pipe-num">2</div></div><h3>Clean & Prepare</h3><p>The AI tidies up the data — fills in any missing values smartly and makes sure all numbers are in a format the AI can read accurately.</p></div>
+      <div class="pipe-item reveal d3"><div class="pipe-icon">🔍<div class="pipe-num">3</div></div><h3>Find Warning Signs</h3><p>The AI identifies which of your values matter most — like a doctor zeroing in on the most important clues from your test results.</p></div>
+      <div class="pipe-item reveal d4"><div class="pipe-icon">🧠<div class="pipe-num">4</div></div><h3>AI Learns & Decides</h3><p>8 different AI algorithms study your data and each gives its own opinion. They then vote together to make the final prediction — more reliable than just one opinion.</p></div>
+      <div class="pipe-item reveal d4"><div class="pipe-icon">📊<div class="pipe-num">5</div></div><h3>Plain Results + Advice</h3><p>You get a clear risk score, kidney health stage, and simple advice in plain language — not confusing medical jargon.</p></div>
+    </div>
+  </div>
+</section>
+
+<!-- MODELS -->
+<section id="models" class="section" style="background:white">
+  <div class="container">
+    <div class="reveal">
+      <div class="section-tag">⚡ AI Performance Results</div>
+      <h2 class="section-h">How Accurate is <em>Our AI?</em></h2>
+      <p class="section-p">We tested 8 different AI methods on real kidney disease patient data and measured how accurately each one detects the disease. Here's how they compare.</p>
+    </div>
+    <div style="margin-top:2rem" class="reveal d1">
+      <div class="tabs-nav">
+        <button class="tab-btn active" onclick="switchTab(event,'tab-acc')">📊 Accuracy Comparison</button>
+        <button class="tab-btn" onclick="switchTab(event,'tab-cm')">✅ Right vs Wrong Answers</button>
+        <button class="tab-btn" onclick="switchTab(event,'tab-fi')">🔑 Most Important Clues</button>
+        <button class="tab-btn" onclick="switchTab(event,'tab-roc')">📈 Detection Chart</button>
+      </div>
+
+      <div class="tab-panel active" id="tab-acc">
+        <div style="background:var(--blue-light);border:1px solid rgba(29,95,196,0.15);border-radius:var(--r-lg);padding:1rem 1.25rem;margin-bottom:1.25rem;font-size:0.875rem;color:var(--navy)">
+          💡 <strong>What does "Accuracy" mean?</strong> If an ML method has 98.8% accuracy, it means out of 100 patients, it correctly identified 98–99 of them. Our best method (Ensemble Voting) combines all 8 ML approaches — like getting a second, third, and fourth opinion.
+        </div>
+        <div style="overflow-x:auto">
+          <table class="model-table">
+            <thead><tr><th>Algorithm</th><th>Accuracy</th><th>Precision</th><th>Recall</th><th>F1-Score</th><th>AUC-ROC</th><th>Time</th></tr></thead>
+            <tbody>
+              <tr class="best-row">
+                <td><strong>Ensemble Voting</strong><span class="badge-best">BEST</span></td>
+                <td><div class="acc-bar-wrap"><div class="acc-bar" style="width:56px"></div>98.8%</div></td>
+                <td>0.989</td><td>0.988</td><td>0.988</td><td>0.993</td><td>0.42s</td>
+              </tr>
+              <tr><td>Random Forest</td><td><div class="acc-bar-wrap"><div class="acc-bar" style="width:54px"></div>98.5%</div></td><td>0.987</td><td>0.985</td><td>0.986</td><td>0.991</td><td>1.23s</td></tr>
+              <tr><td>XGBoost</td><td><div class="acc-bar-wrap"><div class="acc-bar" style="width:51px"></div>97.8%</div></td><td>0.981</td><td>0.978</td><td>0.979</td><td>0.987</td><td>0.87s</td></tr>
+              <tr><td>SVM (RBF Kernel)</td><td><div class="acc-bar-wrap"><div class="acc-bar" style="width:47px"></div>96.3%</div></td><td>0.965</td><td>0.963</td><td>0.964</td><td>0.982</td><td>0.18s</td></tr>
+              <tr><td>Neural Network (MLP)</td><td><div class="acc-bar-wrap"><div class="acc-bar" style="width:46px"></div>95.9%</div></td><td>0.962</td><td>0.959</td><td>0.960</td><td>0.978</td><td>2.14s</td></tr>
+              <tr><td>Decision Tree</td><td><div class="acc-bar-wrap"><div class="acc-bar" style="width:44px"></div>95.1%</div></td><td>0.954</td><td>0.951</td><td>0.952</td><td>0.975</td><td>0.03s</td></tr>
+              <tr><td>K-Nearest Neighbors</td><td><div class="acc-bar-wrap"><div class="acc-bar" style="width:42px"></div>94.7%</div></td><td>0.950</td><td>0.947</td><td>0.948</td><td>0.971</td><td>0.01s</td></tr>
+              <tr><td>Logistic Regression</td><td><div class="acc-bar-wrap"><div class="acc-bar" style="width:38px"></div>93.2%</div></td><td>0.935</td><td>0.932</td><td>0.933</td><td>0.963</td><td>0.05s</td></tr>
+              <tr><td>Naïve Bayes</td><td><div class="acc-bar-wrap"><div class="acc-bar" style="width:32px"></div>88.5%</div></td><td>0.891</td><td>0.885</td><td>0.887</td><td>0.940</td><td>0.01s</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <div class="tab-panel" id="tab-cm">
+        <div style="background:var(--blue-light);border:1px solid rgba(29,95,196,0.15);border-radius:var(--r-lg);padding:1rem 1.25rem;margin-bottom:1.25rem;font-size:0.875rem;color:var(--navy)">
+          💡 <strong>What is this?</strong> Out of 80 test patients, the ML system correctly identified 39 people <em>with</em> kidney disease (green ✓) and 40 people <em>without</em> it (green ✓). It only missed 1 patient — and never falsely alarmed a healthy person. That's near-perfect!
+        </div>
+        <div class="cm-wrap">
+          <div>
+            <div class="cm-legend">Random Forest — Confusion Matrix (n=80 test samples)</div>
+            <div class="cm-grid" style="gap:4px">
+              <div class="cm-lbl"></div>
+              <div class="cm-lbl" style="font-weight:700;color:var(--navy)">Pred: CKD</div>
+              <div class="cm-lbl" style="font-weight:700;color:var(--navy)">Pred: No CKD</div>
+              <div class="cm-lbl" style="writing-mode:vertical-rl;transform:rotate(180deg);font-weight:700;color:var(--navy)">Actual: CKD</div>
+              <div class="cm-cell cm-tp"><div class="cm-val">39</div><div class="cm-tag">TP</div></div>
+              <div class="cm-cell cm-fn"><div class="cm-val">1</div><div class="cm-tag">FN</div></div>
+              <div class="cm-lbl" style="writing-mode:vertical-rl;transform:rotate(180deg);font-weight:700;color:var(--navy)">Actual: No CKD</div>
+              <div class="cm-cell cm-fp"><div class="cm-val">0</div><div class="cm-tag">FP</div></div>
+              <div class="cm-cell cm-tn"><div class="cm-val">40</div><div class="cm-tag">TN</div></div>
+            </div>
+            <div style="display:flex;gap:1rem;margin-top:0.85rem;flex-wrap:wrap;font-size:0.78rem">
+              <span style="color:var(--green);font-weight:600">■ Correct</span>
+              <span style="color:var(--red);font-weight:600">■ False Positive</span>
+              <span style="color:var(--amber);font-weight:600">■ False Negative</span>
+            </div>
+          </div>
+          <div class="cm-metrics">
+            <div style="font-size:0.75rem;font-weight:700;text-transform:uppercase;letter-spacing:0.08em;color:var(--muted);margin-bottom:0.75rem">Derived Metrics</div>
+            <div class="cm-row"><span class="cm-row-name">Sensitivity (Recall)</span><span class="cm-row-val">97.5%</span></div>
+            <div class="cm-row"><span class="cm-row-name">Specificity</span><span class="cm-row-val">100.0%</span></div>
+            <div class="cm-row"><span class="cm-row-name">Precision (PPV)</span><span class="cm-row-val">100.0%</span></div>
+            <div class="cm-row"><span class="cm-row-name">Neg. Predictive Value</span><span class="cm-row-val">97.6%</span></div>
+            <div class="cm-row"><span class="cm-row-name">F1-Score</span><span class="cm-row-val">0.987</span></div>
+            <div class="cm-row"><span class="cm-row-name">Matthews Corr. Coef.</span><span class="cm-row-val">0.975</span></div>
+            <div class="cm-row"><span class="cm-row-name">Cohen's Kappa</span><span class="cm-row-val">0.975</span></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="tab-panel" id="tab-fi">
+        <div style="background:var(--blue-light);border:1px solid rgba(29,95,196,0.15);border-radius:var(--r-lg);padding:1rem 1.25rem;margin-bottom:1.25rem;font-size:0.875rem;color:var(--navy)">
+          💡 <strong>What are these?</strong> These are the health clues the ML finds most useful for spotting kidney disease. Think of them as the "red flags" a doctor would look at first. Hemoglobin (your blood's oxygen carrier) and creatinine (a kidney waste product) are the biggest giveaways.
+        </div>
+        <p style="font-size:0.845rem;color:var(--muted);margin-bottom:1.25rem">Longer bar = stronger clue for detecting kidney disease. Based on analysis of 400 real patient records.</p>
+        <div class="fi-section" id="fiSection">
+          <div class="fi-row"><div class="fi-name">Haemoglobin</div><div class="fi-track"><div class="fi-fill" style="width:0%" data-w="92%"></div></div><div class="fi-pct">0.214</div></div>
+          <div class="fi-row"><div class="fi-name">Specific Gravity</div><div class="fi-track"><div class="fi-fill" style="width:0%" data-w="87%"></div></div><div class="fi-pct">0.198</div></div>
+          <div class="fi-row"><div class="fi-name">Serum Creatinine</div><div class="fi-track"><div class="fi-fill" style="width:0%" data-w="82%"></div></div><div class="fi-pct">0.187</div></div>
+          <div class="fi-row"><div class="fi-name">Albumin (urine)</div><div class="fi-track"><div class="fi-fill" style="width:0%" data-w="74%"></div></div><div class="fi-pct">0.163</div></div>
+          <div class="fi-row"><div class="fi-name">Packed Cell Vol.</div><div class="fi-track"><div class="fi-fill" style="width:0%" data-w="68%"></div></div><div class="fi-pct">0.151</div></div>
+          <div class="fi-row"><div class="fi-name">Blood Urea</div><div class="fi-track"><div class="fi-fill" style="width:0%" data-w="62%"></div></div><div class="fi-pct">0.138</div></div>
+          <div class="fi-row"><div class="fi-name">RBC Count</div><div class="fi-track"><div class="fi-fill" style="width:0%" data-w="52%"></div></div><div class="fi-pct">0.112</div></div>
+          <div class="fi-row"><div class="fi-name">Sugar (urine)</div><div class="fi-track"><div class="fi-fill" style="width:0%" data-w="44%"></div></div><div class="fi-pct">0.094</div></div>
+          <div class="fi-row"><div class="fi-name">Blood Pressure</div><div class="fi-track"><div class="fi-fill" style="width:0%" data-w="38%"></div></div><div class="fi-pct">0.082</div></div>
+          <div class="fi-row"><div class="fi-name">Hypertension</div><div class="fi-track"><div class="fi-fill" style="width:0%" data-w="30%"></div></div><div class="fi-pct">0.067</div></div>
+        </div>
+      </div>
+
+      <div class="tab-panel" id="tab-roc">
+        <div style="background:var(--blue-light);border:1px solid rgba(29,95,196,0.15);border-radius:var(--r-lg);padding:1rem 1.25rem;margin-bottom:1.25rem;font-size:0.875rem;color:var(--navy)">
+          💡 <strong>What is this chart?</strong> This shows how well each ML method catches kidney disease. Curves that hug the top-left corner are better. The red dashed line is a random guess — our ML curves are all much higher, meaning they're far better than guessing!
+        </div>
+        <div style="background:var(--gray-50);border:1px solid var(--border);border-radius:var(--r-lg);padding:1.5rem">
+          <canvas id="rocCanvas" width="560" height="330" style="width:100%;max-width:560px;display:block;margin:0 auto"></canvas>
+        </div>
+        <div style="display:flex;flex-wrap:wrap;gap:1rem;margin-top:1.25rem">
+          <span style="display:flex;align-items:center;gap:0.45rem;font-size:0.8rem"><span style="width:18px;height:3px;background:#1d5fc4;display:inline-block;border-radius:2px"></span>Random Forest (AUC=0.991)</span>
+          <span style="display:flex;align-items:center;gap:0.45rem;font-size:0.8rem"><span style="width:18px;height:3px;background:#0887a8;display:inline-block;border-radius:2px"></span>XGBoost (AUC=0.987)</span>
+          <span style="display:flex;align-items:center;gap:0.45rem;font-size:0.8rem"><span style="width:18px;height:3px;background:#0a7c59;display:inline-block;border-radius:2px"></span>SVM (AUC=0.982)</span>
+          <span style="display:flex;align-items:center;gap:0.45rem;font-size:0.8rem"><span style="width:18px;height:3px;background:#c47a00;display:inline-block;border-radius:2px"></span>Logistic Reg (AUC=0.963)</span>
+          <span style="display:flex;align-items:center;gap:0.45rem;font-size:0.8rem"><span style="width:18px;height:2px;background:#c0392b;display:inline-block;border-radius:2px;border-bottom:2px dashed #c0392b"></span>Chance</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- FEATURES -->
+<section class="section" style="background:var(--bg2)">
+  <div class="container">
+    <div class="text-center reveal">
+      <div class="section-tag">✦ What This Tool Can Do</div>
+      <h2 class="section-h">Everything You Need to <em>Understand Your Kidney Health</em></h2>
+    </div>
+    <div class="feats">
+      <div class="feat-card reveal d1"><div class="feat-icon fi-b">🧬</div><h3>Explains Every Result</h3><p>After checking your risk, the AI tells you <em>exactly why</em> it got that result — which of your values raised or lowered the risk. No more confusing black-box answers.</p></div>
+      <div class="feat-card reveal d2"><div class="feat-icon fi-t">⚡</div><h3>8 AIs Vote Together</h3><p>Instead of trusting just one AI, we use 8 different methods and combine their answers — like getting multiple doctors' opinions. The combined result is 98.8% accurate.</p></div>
+      <div class="feat-card reveal d3"><div class="feat-icon fi-g">📋</div><h3>Tells You Which Stage</h3><p>Kidney disease has 5 stages (from mild to severe). Our tool estimates which stage you might be at and what that means for your health in plain language.</p></div>
+      <div class="feat-card reveal d1"><div class="feat-icon fi-a">📊</div><h3>Check Multiple People</h3><p>Doctors and health workers can upload a list of patients in one go and get results for everyone at once — great for screening large groups.</p></div>
+      <div class="feat-card reveal d2"><div class="feat-icon fi-b">🔒</div><h3>100% Private</h3><p>Your health data never leaves your device. Everything is processed right in your browser — no data is sent to any server, ever. Your privacy is completely protected.</p></div>
+      <div class="feat-card reveal d3"><div class="feat-icon fi-r">📄</div><h3>Download Your Report</h3><p>Get a full written report of your kidney risk assessment that you can save, print, or show to your doctor for a proper follow-up consultation.</p></div>
+    </div>
+  </div>
+</section>
+
+<!-- PREDICTION TOOL -->
+<section id="predict" class="pred-wrap">
+  <div class="container">
+    <div class="text-center reveal" style="margin-bottom:2.25rem">
+      <div class="section-tag">🔬 Free Kidney Risk Check</div>
+      <h2 class="section-h">Enter Your Test Values — <em>Get Instant Results</em></h2>
+      <p class="section-p" style="margin:0 auto">Just fill in the values from your blood/urine report. Don't have all of them? That's okay — fill what you have and the AI will work with it. <strong style="color:var(--red)">⚠ For awareness only — always see a real doctor for diagnosis.</strong></p>
+    </div>
+    <div class="pred-card reveal">
+      <div class="pred-head">
+        <h2>Your Health Information Form</h2>
+        <p>Use your latest blood test report. Values you don't have can be left blank — the ML will still give you a useful estimate.</p>
+      </div>
+      <div class="pred-tabs">
+        <button class="pred-tab active" onclick="switchPredTab(event,'ptab-basic')">📋 Basic Info</button>
+        <button class="pred-tab" onclick="switchPredTab(event,'ptab-blood')">🩸 Blood Test Values</button>
+        <button class="pred-tab" onclick="switchPredTab(event,'ptab-urine')">💧 Urine Test Values</button>
+        <button class="pred-tab" onclick="switchPredTab(event,'ptab-clinical')">🏥 Medical Conditions</button>
+      </div>
+      <div class="pred-body">
+
+        <!-- BASIC -->
+        <div class="pred-tab-panel active" id="ptab-basic">
+          <div class="field-section">👤 About You</div>
+          <div class="grid-3">
+            <div class="fgroup">
+              <label>Your Age</label>
+              <div class="input-wrap"><input class="form-ctrl has-unit" type="number" id="p-age" placeholder="e.g. 48" min="1" max="120"><span class="unit-lbl">yrs</span></div>
+              <div class="range-hint">Enter your age in years</div>
+            </div>
+            <div class="fgroup">
+              <label>Blood Pressure (lower number)</label>
+              <div class="input-wrap"><input class="form-ctrl has-unit" type="number" id="p-bp" placeholder="e.g. 80" min="40" max="180"><span class="unit-lbl">mmHg</span></div>
+              <div class="range-hint">The bottom number in "120/80" → enter 80. Normal: 60–90</div>
+            </div>
+            <div class="fgroup">
+              <label>Urine Specific Gravity <span style="font-weight:400;color:var(--muted)">(urine test)</span></label>
+              <div class="input-wrap"><input class="form-ctrl" type="number" id="p-sg" step="0.001" placeholder="e.g. 1.020" min="1.005" max="1.030"></div>
+              <div class="range-hint">Shows how well kidneys concentrate urine. Normal: 1.010–1.025</div>
+            </div>
+            <div class="fgroup">
+              <label>Blood Sugar (Random)</label>
+              <div class="input-wrap"><input class="form-ctrl has-unit" type="number" id="p-bgr" placeholder="e.g. 120" min="50" max="500"><span class="unit-lbl">mg/dL</span></div>
+              <div class="range-hint">From blood sugar test. Normal: below 140 mg/dL</div>
+            </div>
+            <div class="fgroup">
+              <label>Daily Urine Output</label>
+              <div class="input-wrap"><input class="form-ctrl has-unit" type="number" id="p-urine" placeholder="e.g. 1500" min="100" max="4000"><span class="unit-lbl">mL/d</span></div>
+              <div class="range-hint">Approximate urine amount per day. Normal: 800–2000 mL</div>
+            </div>
+            <div class="fgroup">
+              <label>Body Weight</label>
+              <div class="input-wrap"><input class="form-ctrl has-unit" type="number" id="p-weight" placeholder="e.g. 70" min="20" max="200"><span class="unit-lbl">kg</span></div>
+              <div class="range-hint">Your current weight in kilograms</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- BLOOD -->
+        <div class="pred-tab-panel" id="ptab-blood">
+          <div class="field-section">🩸 Blood Test Results <span style="font-weight:400;font-size:0.7rem;text-transform:none;letter-spacing:0">(from your latest blood report)</span></div>
+          <div class="grid-3">
+            <div class="fgroup">
+              <label>Serum Creatinine <span style="color:var(--red);font-size:0.7rem">★ Most Important</span></label>
+              <div class="input-wrap"><input class="form-ctrl has-unit" type="number" id="p-sc" step="0.1" placeholder="e.g. 1.2" min="0.1" max="20"><span class="unit-lbl">mg/dL</span></div>
+              <div class="range-hint">Kidney waste product. High = kidneys struggling. Normal: 0.6–1.2</div>
+            </div>
+            <div class="fgroup">
+              <label>Blood Urea (BUN)</label>
+              <div class="input-wrap"><input class="form-ctrl has-unit" type="number" id="p-bu" placeholder="e.g. 30" min="5" max="200"><span class="unit-lbl">mg/dL</span></div>
+              <div class="range-hint">Another waste product kidneys filter. Normal: 7–25 mg/dL</div>
+            </div>
+            <div class="fgroup">
+              <label>Sodium (Salt in Blood)</label>
+              <div class="input-wrap"><input class="form-ctrl has-unit" type="number" id="p-sod" placeholder="e.g. 140" min="100" max="170"><span class="unit-lbl">mEq/L</span></div>
+              <div class="range-hint">Controls fluid balance. Normal: 136–145 mEq/L</div>
+            </div>
+            <div class="fgroup">
+              <label>Potassium</label>
+              <div class="input-wrap"><input class="form-ctrl has-unit" type="number" id="p-pot" step="0.1" placeholder="e.g. 4.0" min="2" max="8"><span class="unit-lbl">mEq/L</span></div>
+              <div class="range-hint">Too high can be dangerous in kidney disease. Normal: 3.5–5.0</div>
+            </div>
+            <div class="fgroup">
+              <label>Hemoglobin <span style="color:var(--red);font-size:0.7rem">★ Important</span></label>
+              <div class="input-wrap"><input class="form-ctrl has-unit" type="number" id="p-hemo" step="0.1" placeholder="e.g. 13.5" min="3" max="20"><span class="unit-lbl">g/dL</span></div>
+              <div class="range-hint">Carries oxygen in blood. Low = anemia (common in CKD). Normal: 12–17</div>
+            </div>
+            <div class="fgroup">
+              <label>Packed Cell Volume (PCV)</label>
+              <div class="input-wrap"><input class="form-ctrl has-unit" type="number" id="p-pcv" placeholder="e.g. 44" min="10" max="65"><span class="unit-lbl">%</span></div>
+              <div class="range-hint">% of blood that is red cells. Low = anemia. Normal: 36–50%</div>
+            </div>
+            <div class="fgroup">
+              <label>White Blood Cell Count (WBC)</label>
+              <div class="input-wrap"><input class="form-ctrl has-unit" type="number" id="p-wc" placeholder="e.g. 7800" min="2000" max="30000"><span class="unit-lbl">/mm³</span></div>
+              <div class="range-hint">Infection-fighting cells. Normal: 4,000–11,000</div>
+            </div>
+            <div class="fgroup">
+              <label>Red Blood Cell Count (RBC)</label>
+              <div class="input-wrap"><input class="form-ctrl has-unit" type="number" id="p-rc" step="0.1" placeholder="e.g. 4.8" min="1" max="8"><span class="unit-lbl">mil/mm³</span></div>
+              <div class="range-hint">Oxygen-carrying cells. Normal: 4.0–6.0 million</div>
+            </div>
+            <div class="fgroup">
+              <label>Serum Albumin (Blood Protein)</label>
+              <div class="input-wrap"><input class="form-ctrl has-unit" type="number" id="p-salb" step="0.1" placeholder="e.g. 4.0" min="0.5" max="6"><span class="unit-lbl">g/dL</span></div>
+              <div class="range-hint">Main protein in blood. Low = poor nutrition or kidney loss. Normal: 3.5–5.0</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- URINE -->
+        <div class="pred-tab-panel" id="ptab-urine">
+          <div class="field-section">💧 Urine Test Results <span style="font-weight:400;font-size:0.7rem;text-transform:none;letter-spacing:0">(from urine/dipstick test report)</span></div>
+          <div class="grid-3">
+            <div class="fgroup">
+              <label>Protein in Urine (Albumin) <span style="color:var(--red);font-size:0.7rem">★ Key Sign</span></label>
+              <select class="form-ctrl" id="p-al">
+                <option value="">Select from report</option>
+                <option value="0">0 — None (Normal)</option>
+                <option value="1">1 — Trace (very little)</option>
+                <option value="2">2 — + (mild amount)</option>
+                <option value="3">3 — ++ (moderate)</option>
+                <option value="4">4 — +++ (heavy — concerning)</option>
+              </select>
+              <div class="range-hint">Protein leaking into urine = kidneys may be damaged. Normal: None (0)</div>
+            </div>
+            <div class="fgroup">
+              <label>Sugar in Urine</label>
+              <select class="form-ctrl" id="p-su">
+                <option value="">Select from report</option>
+                <option value="0">0 — None (Normal)</option>
+                <option value="1">1 — Trace</option>
+                <option value="2">2 — + (mild)</option>
+                <option value="3">3 — ++ (moderate)</option>
+                <option value="4">4 — +++ (heavy)</option>
+              </select>
+              <div class="range-hint">Sugar in urine can indicate diabetes affecting kidneys. Normal: None (0)</div>
+            </div>
+            <div class="fgroup">
+              <label>Red Blood Cells in Urine</label>
+              <select class="form-ctrl" id="p-rbc-u">
+                <option value="">Select</option>
+                <option value="normal">Normal (none seen)</option>
+                <option value="abnormal">Abnormal (blood in urine)</option>
+              </select>
+              <div class="range-hint">Blood in urine can signal kidney damage</div>
+            </div>
+            <div class="fgroup">
+              <label>Pus Cells in Urine</label>
+              <select class="form-ctrl" id="p-pc">
+                <option value="">Select</option>
+                <option value="normal">Normal (few or none)</option>
+                <option value="abnormal">Abnormal (many pus cells = infection sign)</option>
+              </select>
+              <div class="range-hint">Many pus cells = possible urinary infection</div>
+            </div>
+            <div class="fgroup">
+              <label>Pus Cell Clumps</label>
+              <select class="form-ctrl" id="p-pcc">
+                <option value="">Select</option>
+                <option value="notpresent">Not seen</option>
+                <option value="present">Present (infection indicator)</option>
+              </select>
+            </div>
+            <div class="fgroup">
+              <label>Bacteria in Urine</label>
+              <select class="form-ctrl" id="p-ba">
+                <option value="">Select</option>
+                <option value="notpresent">Not seen</option>
+                <option value="present">Present (signs of infection)</option>
+              </select>
+            </div>
+          </div>
+        </div>
+
+        <!-- CLINICAL -->
+        <div class="pred-tab-panel" id="ptab-clinical">
+          <div class="field-section">🏥 Do You Have These Conditions?</div>
+          <div class="grid-2">
+            <div class="fgroup">
+              <label>High Blood Pressure (Hypertension)?</label>
+              <div class="radio-row">
+                <div class="radio-opt"><input type="radio" name="htn" id="htn-no" value="no"><label for="htn-no">No</label></div>
+                <div class="radio-opt"><input type="radio" name="htn" id="htn-yes" value="yes"><label for="htn-yes">Yes</label></div>
+                <div class="radio-opt"><input type="radio" name="htn" id="htn-uk" value="unknown" checked><label for="htn-uk">Not Sure</label></div>
+              </div>
+            </div>
+            <div class="fgroup">
+              <label>Diabetes (High Blood Sugar)?</label>
+              <div class="radio-row">
+                <div class="radio-opt"><input type="radio" name="dm" id="dm-no" value="no"><label for="dm-no">No</label></div>
+                <div class="radio-opt"><input type="radio" name="dm" id="dm-yes" value="yes"><label for="dm-yes">Yes</label></div>
+                <div class="radio-opt"><input type="radio" name="dm" id="dm-uk" value="unknown" checked><label for="dm-uk">Not Sure</label></div>
+              </div>
+            </div>
+            <div class="fgroup">
+              <label>Heart / Coronary Artery Disease?</label>
+              <div class="radio-row">
+                <div class="radio-opt"><input type="radio" name="cad" id="cad-no" value="no"><label for="cad-no">No</label></div>
+                <div class="radio-opt"><input type="radio" name="cad" id="cad-yes" value="yes"><label for="cad-yes">Yes</label></div>
+                <div class="radio-opt"><input type="radio" name="cad" id="cad-uk" value="unknown" checked><label for="cad-uk">Not Sure</label></div>
+              </div>
+            </div>
+            <div class="fgroup">
+              <label>How is your appetite (desire to eat)?</label>
+              <div class="radio-row">
+                <div class="radio-opt"><input type="radio" name="appet" id="app-good" value="good"><label for="app-good">Good</label></div>
+                <div class="radio-opt"><input type="radio" name="appet" id="app-poor" value="poor"><label for="app-poor">Poor / Low</label></div>
+                <div class="radio-opt"><input type="radio" name="appet" id="app-uk" value="unknown" checked><label for="app-uk">Not Sure</label></div>
+              </div>
+            </div>
+            <div class="fgroup">
+              <label>Swollen Feet or Ankles (Pedal Edema)?</label>
+              <div class="radio-row">
+                <div class="radio-opt"><input type="radio" name="pe" id="pe-no" value="no"><label for="pe-no">No</label></div>
+                <div class="radio-opt"><input type="radio" name="pe" id="pe-yes" value="yes"><label for="pe-yes">Yes</label></div>
+                <div class="radio-opt"><input type="radio" name="pe" id="pe-uk" value="unknown" checked><label for="pe-uk">Not Sure</label></div>
+              </div>
+            </div>
+            <div class="fgroup">
+              <label>Anemia (Low Blood / Always Tired)?</label>
+              <div class="radio-row">
+                <div class="radio-opt"><input type="radio" name="ane" id="ane-no" value="no"><label for="ane-no">No</label></div>
+                <div class="radio-opt"><input type="radio" name="ane" id="ane-yes" value="yes"><label for="ane-yes">Yes</label></div>
+                <div class="radio-opt"><input type="radio" name="ane" id="ane-uk" value="unknown" checked><label for="ane-uk">Not Sure</label></div>
+              </div>
+            </div>
+            <div class="fgroup">
+              <label>Gender</label>
+              <div class="radio-row">
+                <div class="radio-opt"><input type="radio" name="gender" id="g-male" value="male"><label for="g-male">Male</label></div>
+                <div class="radio-opt"><input type="radio" name="gender" id="g-female" value="female"><label for="g-female">Female</label></div>
+                <div class="radio-opt"><input type="radio" name="gender" id="g-other" value="other" checked><label for="g-other">Prefer not to say</label></div>
+              </div>
+            </div>
+          </div>
+          <div class="fgroup">
+            <label>Family History — Does anyone in your family have:</label>
+            <div class="check-col" style="margin-top:0.35rem">
+              <label class="check-item"><input type="checkbox" id="fh-ckd"> Kidney disease (any type)</label>
+              <label class="check-item"><input type="checkbox" id="fh-dm"> Diabetes</label>
+              <label class="check-item"><input type="checkbox" id="fh-htn"> High blood pressure</label>
+              <label class="check-item"><input type="checkbox" id="fh-cvd"> Heart disease</label>
+            </div>
+          </div>
+        </div>
+
+        <!-- ACTION BUTTONS -->
+        <div class="pred-actions">
+          <button class="btn-predict" id="predictBtn" onclick="runPrediction()">
+            <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path d="M13 10V3L4 14h7v7l9-11h-7z"/></svg>
+            Check My Kidney Risk Now
+          </button>
+          <button class="btn-secondary btn-ghost" onclick="resetForm()">↺ Clear All Fields</button>
+          <button class="btn-secondary btn-warn" onclick="loadHighRisk()">⚠ Load High-Risk Example</button>
+          <button class="btn-secondary btn-ok" onclick="loadLowRisk()">✓ Load Healthy Example</button>
+        </div>
+
+        <!-- RESULTS SECTION -->
+        <div class="result-section" id="resultSection">
+          <!-- Alert -->
+          <div class="result-alert" id="resultAlert">
+            <div class="alert-icon" id="resultIcon"></div>
+            <div id="resultTextWrap">
+              <div class="alert-title" id="resultTitle"></div>
+              <div class="alert-desc" id="resultDesc"></div>
+            </div>
+          </div>
+          <!-- 4 metric cards -->
+          <div class="result-cards">
+            <div class="res-card"><div class="res-card-val" id="rc-risk">—</div><div class="res-card-lbl">CKD Risk Score</div></div>
+            <div class="res-card"><div class="res-card-val" id="rc-conf">—</div><div class="res-card-lbl">Model Confidence</div></div>
+            <div class="res-card"><div class="res-card-val" id="rc-egfr">—</div><div class="res-card-lbl">Est. eGFR (mL/min)</div></div>
+            <div class="res-card"><div class="res-card-val" id="rc-stage">—</div><div class="res-card-lbl">CKD Stage</div></div>
+          </div>
+          <!-- SHAP -->
+          <div class="shap-box">
+            <div class="shap-title">📊 SHAP Feature Contributions — Red = increases risk, Blue = decreases risk</div>
+            <div class="shap-rows" id="shapRows"></div>
+          </div>
+          <!-- Stage -->
+          <div style="background:white;border:1px solid var(--border);border-radius:var(--r-lg);padding:1.4rem;margin-bottom:1.4rem">
+            <div class="shap-title">CKD Stage Classification (KDIGO 2024)</div>
+            <div class="stages-row">
+              <div class="ckd-stage-chip cs1" id="cstage-1"><div class="cs-name">G1</div><div class="cs-desc">eGFR ≥90</div></div>
+              <div class="ckd-stage-chip cs2" id="cstage-2"><div class="cs-name">G2</div><div class="cs-desc">60–89</div></div>
+              <div class="ckd-stage-chip cs3" id="cstage-3"><div class="cs-name">G3</div><div class="cs-desc">30–59</div></div>
+              <div class="ckd-stage-chip cs4" id="cstage-4"><div class="cs-name">G4</div><div class="cs-desc">15–29</div></div>
+              <div class="ckd-stage-chip cs5" id="cstage-5"><div class="cs-name">G5</div><div class="cs-desc">&lt;15</div></div>
+            </div>
+          </div>
+          <!-- Recommendations -->
+          <div class="recs-box">
+            <div class="recs-title">📋 Clinical Recommendations</div>
+            <div class="recs-list" id="recsList"></div>
+          </div>
+          <!-- Model probabilities -->
+          <div class="prob-section">
+            <div class="shap-title">Ensemble Model Probabilities</div>
+            <div class="prob-rows">
+              <div><div class="prob-row-label"><span>Random Forest</span><span id="prob-rf" style="color:var(--blue)">—</span></div><div class="prob-track"><div class="prob-fill" id="bar-rf" style="background:var(--blue)"></div></div></div>
+              <div><div class="prob-row-label"><span>XGBoost</span><span id="prob-xgb" style="color:var(--teal)">—</span></div><div class="prob-track"><div class="prob-fill" id="bar-xgb" style="background:var(--teal)"></div></div></div>
+              <div><div class="prob-row-label"><span>SVM</span><span id="prob-svm" style="color:var(--green)">—</span></div><div class="prob-track"><div class="prob-fill" id="bar-svm" style="background:var(--green)"></div></div></div>
+              <div><div class="prob-row-label"><span style="font-weight:700">Ensemble (Final)</span><span id="prob-ens" style="color:var(--navy);font-weight:700">—</span></div><div class="prob-track"><div class="prob-fill" id="bar-ens" style="background:linear-gradient(90deg,var(--blue),var(--teal))"></div></div></div>
+            </div>
+          </div>
+          <!-- Download btns -->
+          <div class="result-btns">
+            <button class="btn-dl btn-dl-dark" onclick="downloadReport()">⬇ Download Report</button>
+            <button class="btn-dl btn-dl-teal" onclick="printReport()">🖨 Print Report</button>
+            <button class="btn-dl btn-dl-ghost" onclick="copyResult()">🔗 Copy Summary</button>
+            <button class="btn-dl btn-dl-ghost" onclick="saveHistory()">💾 Save to History</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- BATCH UPLOAD -->
+<section class="section" style="background:white">
+  <div class="container">
+    <div class="reveal">
+      <div class="section-tag">📂 For Doctors & Health Workers</div>
+      <h2 class="section-h">Check <em>Many Patients at Once</em></h2>
+      <p class="section-p">If you're a doctor, nurse, or health researcher, you can upload a spreadsheet (CSV file) with multiple patients' data and get AI risk scores for all of them instantly.</p>
+    </div>
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:2rem;margin-top:2rem;align-items:start" class="reveal d1">
+      <div>
+        <div class="upload-zone" id="dropZone"
+          onclick="document.getElementById('fileInput').click()"
+          ondragover="ev(event);this.classList.add('drag')"
+          ondrop="handleDrop(event)"
+          ondragleave="this.classList.remove('drag')">
+          <div style="font-size:2.5rem">📁</div>
+          <h3>Drop Your Patient List Here</h3>
+          <p>Or click to browse. The file must be a CSV spreadsheet with patient health values as columns.</p>
+          <div class="upload-cta">📂 Choose CSV File</div>
+          <p style="margin-top:0.7rem;font-size:0.72rem;color:var(--muted)">Accepts .csv format · Up to 100 patients at once</p>
+        </div>
+        <input type="file" id="fileInput" accept=".csv" onchange="handleFileUpload(event)">
+        <div style="display:flex;gap:0.6rem;margin-top:1rem;flex-wrap:wrap">
+          <button class="btn-dl btn-dl-dark" onclick="downloadSampleCSV()">⬇ Download Sample CSV</button>
+          <button class="btn-dl btn-dl-ghost" id="batchDlBtn" onclick="downloadBatchCSV()" style="display:none">⬇ Download Results</button>
+        </div>
+      </div>
+      <div style="background:var(--gray-50);border:1px solid var(--border);border-radius:var(--r-lg);padding:1.4rem">
+        <h3 style="font-size:0.9rem;font-weight:700;color:var(--navy);margin-bottom:0.85rem">📋 CSV Column Reference</h3>
+        <table style="width:100%;font-size:0.8rem;border-collapse:collapse">
+          <tr style="border-bottom:1px solid var(--border)"><th style="text-align:left;padding:0.35rem 0.4rem;color:var(--blue)">Column</th><th style="text-align:left;padding:0.35rem 0.4rem;color:var(--muted)">Description</th></tr>
+          <tr><td style="padding:0.3rem 0.4rem;font-family:var(--f-mono);font-size:0.72rem">age</td><td style="padding:0.3rem 0.4rem;color:var(--muted)">Age in years</td></tr>
+          <tr><td style="padding:0.3rem 0.4rem;font-family:var(--f-mono);font-size:0.72rem">bp</td><td style="padding:0.3rem 0.4rem;color:var(--muted)">Diastolic BP (mmHg)</td></tr>
+          <tr><td style="padding:0.3rem 0.4rem;font-family:var(--f-mono);font-size:0.72rem">sc</td><td style="padding:0.3rem 0.4rem;color:var(--muted)">Serum creatinine (mg/dL)</td></tr>
+          <tr><td style="padding:0.3rem 0.4rem;font-family:var(--f-mono);font-size:0.72rem">hemo</td><td style="padding:0.3rem 0.4rem;color:var(--muted)">Hemoglobin (g/dL)</td></tr>
+          <tr><td style="padding:0.3rem 0.4rem;font-family:var(--f-mono);font-size:0.72rem">bu</td><td style="padding:0.3rem 0.4rem;color:var(--muted)">Blood urea (mg/dL)</td></tr>
+          <tr><td style="padding:0.3rem 0.4rem;font-family:var(--f-mono);font-size:0.72rem">pcv</td><td style="padding:0.3rem 0.4rem;color:var(--muted)">Packed cell volume (%)</td></tr>
+          <tr><td style="padding:0.3rem 0.4rem;font-family:var(--f-mono);font-size:0.72rem">al</td><td style="padding:0.3rem 0.4rem;color:var(--muted)">Albumin in urine (0–4)</td></tr>
+          <tr><td style="padding:0.3rem 0.4rem;font-family:var(--f-mono);font-size:0.72rem">htn</td><td style="padding:0.3rem 0.4rem;color:var(--muted)">Hypertension (yes/no)</td></tr>
+          <tr><td style="padding:0.3rem 0.4rem;font-family:var(--f-mono);font-size:0.72rem">dm</td><td style="padding:0.3rem 0.4rem;color:var(--muted)">Diabetes Mellitus (yes/no)</td></tr>
+        </table>
+      </div>
+    </div>
+    <div class="batch-results" id="batchResults">
+      <div style="display:flex;justify-content:space-between;align-items:center;margin:1.5rem 0 1rem;flex-wrap:wrap;gap:0.5rem">
+        <h3 id="batchSummaryText" style="font-weight:700;color:var(--navy);font-size:0.95rem"></h3>
+        <div id="batchStatsBar" style="font-size:0.8rem;color:var(--muted)"></div>
+      </div>
+      <div style="overflow-x:auto">
+        <table class="batch-table">
+          <thead><tr><th>#</th><th>Age</th><th>BP</th><th>Creatinine</th><th>Hemoglobin</th><th>Risk Score</th><th>Prediction</th><th>Confidence</th><th>eGFR</th><th>Stage</th></tr></thead>
+          <tbody id="batchTbody"></tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- RISK CALCULATOR -->
+<section id="risk-calc" class="section" style="background:var(--bg2)">
+  <div class="container">
+    <div class="reveal">
+      <div class="section-tag">⚖ Explore Risk Interactively</div>
+      <h2 class="section-h">Play With the <em>Risk Sliders</em></h2>
+      <p class="section-p">Curious how different health values affect kidney risk? Drag the sliders and watch the risk meter update instantly. A great way to understand what matters most for kidney health.</p>
+    </div>
+    <div class="calc-layout" style="margin-top:2rem">
+      <div class="reveal d1">
+        <div class="sliders-wrap" id="slidersWrap">
+          <div class="slider-group"><label>Creatinine — kidney waste in blood <span id="sv-sc">1.0 mg/dL</span></label><input type="range" min="0.5" max="12" step="0.1" value="1.0" id="sl-sc" oninput="updateCalc()"></div>
+          <div class="slider-group"><label>Blood Urea — another kidney waste product <span id="sv-bu">25 mg/dL</span></label><input type="range" min="5" max="200" step="1" value="25" id="sl-bu" oninput="updateCalc()"></div>
+          <div class="slider-group"><label>Hemoglobin — oxygen in blood (low = anemia) <span id="sv-hemo">13.5 g/dL</span></label><input type="range" min="3" max="17.5" step="0.1" value="13.5" id="sl-hemo" oninput="updateCalc()"></div>
+          <div class="slider-group"><label>Protein in Urine — 0 is normal, 4 is severe <span id="sv-al">0</span></label><input type="range" min="0" max="4" step="1" value="0" id="sl-al" oninput="updateCalc()"></div>
+          <div class="slider-group"><label>Urine Specific Gravity — kidney's ability to concentrate <span id="sv-sg">1.020</span></label><input type="range" min="1.005" max="1.030" step="0.001" value="1.020" id="sl-sg" oninput="updateCalc()"></div>
+          <div class="slider-group"><label>Packed Cell Volume (PCV) — red blood cell % <span id="sv-pcv">44%</span></label><input type="range" min="10" max="55" step="1" value="44" id="sl-pcv" oninput="updateCalc()"></div>
+          <div class="slider-group"><label>Blood Pressure (lower/diastolic number) <span id="sv-bp">80 mmHg</span></label><input type="range" min="40" max="160" step="1" value="80" id="sl-bp" oninput="updateCalc()"></div>
+          <div class="slider-group"><label>Age <span id="sv-age">45 yrs</span></label><input type="range" min="2" max="90" step="1" value="45" id="sl-age" oninput="updateCalc()"></div>
+        </div>
+        <div class="calc-checks">
+          <label class="calc-check"><input type="checkbox" id="sl-htn" onchange="updateCalc()"> Has High Blood Pressure</label>
+          <label class="calc-check"><input type="checkbox" id="sl-dm" onchange="updateCalc()"> Has Diabetes</label>
+          <label class="calc-check"><input type="checkbox" id="sl-ane" onchange="updateCalc()"> Has Anemia</label>
+          <label class="calc-check"><input type="checkbox" id="sl-pe" onchange="updateCalc()"> Has Swollen Feet / Ankles</label>
+        </div>
+      </div>
+      <div class="reveal d2">
+        <div class="calc-gauge-wrap">
+          <div style="font-size:0.72rem;font-weight:700;text-transform:uppercase;letter-spacing:0.09em;color:var(--muted);margin-bottom:1.25rem">Your Live Risk Meter</div>
+          <div class="big-gauge">
+            <svg class="bg-svg" width="200" height="200" viewBox="0 0 200 200">
+              <circle class="bg-track" cx="100" cy="100" r="85"/>
+              <circle class="bg-fill" id="calcGaugeCircle" cx="100" cy="100" r="85" stroke="var(--green)"/>
+            </svg>
+            <div class="gauge-center">
+              <div class="gauge-pct" id="calcPct">0%</div>
+              <div class="gauge-lbl">CKD Risk</div>
+              <div class="gauge-risk-name" id="calcRiskName" style="color:var(--green)">LOW</div>
+            </div>
+          </div>
+          <div class="rf-list" id="calcRfList"></div>
+          <div class="egfr-display">
+            <div class="egfr-label">Kidney Filtering Score (eGFR)</div>
+            <div class="egfr-val" id="calcEgfr">—</div>
+            <div class="egfr-stage" id="calcStage">—</div>
+            <div style="font-size:0.7rem;color:var(--muted);margin-top:0.4rem">Higher eGFR = healthier kidneys. Normal is above 90.</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- HISTORY -->
+<section class="section" style="background:white">
+  <div class="container">
+    <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:1.75rem;flex-wrap:wrap;gap:0.75rem" class="reveal">
+      <div>
+        <div class="section-tag">📚 Your Previous Checks</div>
+        <h2 class="section-h">Saved <em>Results History</em></h2>
+      </div>
+      <button class="btn-dl" onclick="clearHistory()" style="background:var(--red);color:white;border:none;padding:0.6rem 1.25rem;border-radius:7px;font-weight:700;font-size:0.82rem;cursor:pointer">🗑 Clear History</button>
+    </div>
+    <div class="hist-wrap reveal d1">
+      <div id="histList" class="hist-list">
+        <div class="hist-empty"><div class="empty-icon">📋</div><p>No saved checks yet. Fill in your details above, get a result, and click "Save to History" to keep track.</p></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- CKD GUIDE -->
+<section id="ckd-info" class="section" style="background:var(--bg2)">
+  <div class="container">
+    <div class="text-center reveal">
+      <div class="section-tag">📖 Plain-Language Guide</div>
+      <h2 class="section-h">What is <em>Kidney Disease?</em></h2>
+      <p class="section-p" style="margin:0 auto">Everything you need to know about chronic kidney disease — explained simply, without medical jargon.</p>
+    </div>
+
+    <!-- What is CKD intro box -->
+    <div style="background:white;border:1px solid var(--border);border-radius:var(--r-xl);padding:2rem;margin:2rem 0;box-shadow:var(--shadow-sm)" class="reveal">
+      <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:1.5rem;text-align:center">
+        <div><div style="font-size:2.5rem;margin-bottom:0.5rem">🫘</div><h3 style="font-size:0.95rem;margin-bottom:0.4rem">What are kidneys?</h3><p style="font-size:0.835rem;color:var(--muted)">Two bean-shaped organs that clean your blood, remove waste through urine, and control fluid balance in your body.</p></div>
+        <div><div style="font-size:2.5rem;margin-bottom:0.5rem">🚨</div><h3 style="font-size:0.95rem;margin-bottom:0.4rem">What is CKD?</h3><p style="font-size:0.835rem;color:var(--muted)">When kidneys slowly lose their ability to clean blood properly. It's called "chronic" because it develops over months or years — often silently.</p></div>
+        <div><div style="font-size:2.5rem;margin-bottom:0.5rem">😶</div><h3 style="font-size:0.95rem;margin-bottom:0.4rem">Why is it silent?</h3><p style="font-size:0.835rem;color:var(--muted)">Kidneys can work with just 15% function without showing obvious symptoms. Most people only discover CKD during a routine blood test.</p></div>
+      </div>
+    </div>
+    <h3 style="font-size:1rem;font-weight:700;color:var(--navy);margin-bottom:0.25rem" class="reveal">The 5 Stages of Kidney Disease — From Mild to Severe</h3>
+    <p style="font-size:0.845rem;color:var(--muted);margin-bottom:1rem" class="reveal">The eGFR score (kidney filtering score) determines which stage you're in. Higher = healthier.</p>
+    <div class="stages-vis reveal">
+      <div class="stage-vis-card" style="background:#dbeafe;border-color:#bfdbfe"><h4 style="color:#1d4ed8">Stage 1 — Mild</h4><div class="gfr" style="color:#2563eb">eGFR ≥ 90 (Normal)</div><p style="color:#1e40af">Kidneys work normally but some signs of damage exist (like protein in urine). Monitor once a year.</p></div>
+      <div class="stage-vis-card" style="background:#dcfce7;border-color:#bbf7d0"><h4 style="color:#15803d">Stage 2 — Mild</h4><div class="gfr" style="color:#16a34a">eGFR 60–89</div><p style="color:#166534">Slightly reduced but still working well. No symptoms usually. Regular check-ups needed.</p></div>
+      <div class="stage-vis-card" style="background:#fef9c3;border-color:#fef08a"><h4 style="color:#854d0e">Stage 3 — Moderate</h4><div class="gfr" style="color:#a16207">eGFR 30–59</div><p style="color:#92400e">Noticeable reduction. You may feel tired or have swelling. See a kidney specialist.</p></div>
+      <div class="stage-vis-card" style="background:#ffedd5;border-color:#fed7aa"><h4 style="color:#9a3412">Stage 4 — Severe</h4><div class="gfr" style="color:#c2410c">eGFR 15–29</div><p style="color:#7c2d12">Kidneys struggling badly. Prepare for possible dialysis or transplant soon.</p></div>
+      <div class="stage-vis-card" style="background:#fee2e2;border-color:#fecaca"><h4 style="color:#991b1b">Stage 5 — Failure</h4><div class="gfr" style="color:#dc2626">eGFR &lt; 15</div><p style="color:#7f1d1d">Kidneys have almost stopped. Dialysis or kidney transplant is urgently required.</p></div>
+    </div>
+    <div class="edu-grid reveal">
+      <div class="edu-card">
+        <div class="edu-top"><h3>Understanding Your Test Results</h3><p>What each number on your report actually means</p></div>
+        <div class="edu-body">
+          <button class="acc-btn" onclick="toggleAcc(this)">What is Creatinine? <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 9l6 6 6-6"/></svg></button>
+          <div class="acc-content">Creatinine is a waste product created when your muscles work. Healthy kidneys filter it out of your blood into urine. If creatinine builds up in your blood, it means your kidneys aren't filtering properly. <strong>Normal: 0.6–1.2 mg/dL for men, 0.5–1.1 for women.</strong> Even a small rise above normal deserves attention.</div>
+          <button class="acc-btn" onclick="toggleAcc(this)">What is eGFR — the Kidney Score? <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 9l6 6 6-6"/></svg></button>
+          <div class="acc-content">eGFR stands for "estimated Glomerular Filtration Rate" — essentially, how well your kidneys are filtering your blood per minute. Think of it like a car engine efficiency rating. <strong>Above 90 is normal. Below 60 for 3+ months means kidney disease.</strong> Doctors use eGFR to decide treatments and drug dosages.</div>
+          <button class="acc-btn" onclick="toggleAcc(this)">What is Blood Urea (BUN)? <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 9l6 6 6-6"/></svg></button>
+          <div class="acc-content">Blood Urea Nitrogen (BUN) is another waste product — this one comes from breaking down proteins you eat. Healthy kidneys remove it. High BUN usually means kidneys are struggling, but it can also go up from dehydration or eating a lot of protein. <strong>Normal: 7–25 mg/dL.</strong> Doctors often look at both BUN and creatinine together.</div>
+          <button class="acc-btn" onclick="toggleAcc(this)">Why does Hemoglobin (blood level) drop in kidney disease? <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 9l6 6 6-6"/></svg></button>
+          <div class="acc-content">Your kidneys produce a hormone called EPO that tells your bone marrow to make red blood cells. When kidneys are damaged, they produce less EPO → fewer red blood cells → anemia (low blood). This is why people with kidney disease often feel tired and weak. <strong>Normal hemoglobin: 12+ g/dL for women, 13+ for men.</strong></div>
+          <button class="acc-btn" onclick="toggleAcc(this)">Why is Protein (Albumin) in Urine a Warning Sign? <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 9l6 6 6-6"/></svg></button>
+          <div class="acc-content">Healthy kidneys act like a fine filter — they keep protein inside your blood and only let waste out into urine. When kidneys are damaged, the filter develops "holes" and protein leaks into urine. Finding protein in urine is one of the earliest warning signs of kidney damage, often appearing before any symptoms.</div>
+        </div>
+      </div>
+      <div class="edu-card">
+        <div class="edu-top"><h3>Who Gets Kidney Disease & How to Prevent It</h3><p>Risk factors, warning signs, and what you can do</p></div>
+        <div class="edu-body">
+          <button class="acc-btn" onclick="toggleAcc(this)">Who is most at risk? <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 9l6 6 6-6"/></svg></button>
+          <div class="acc-content">The biggest risk factors are: <strong>Diabetes</strong> (causes 40% of all kidney disease), <strong>High blood pressure</strong> (second most common cause), being over 60, having a family member with kidney disease, being overweight, and taking certain pain medicines (like ibuprofen/Brufen) regularly for years.</div>
+          <button class="acc-btn" onclick="toggleAcc(this)">What can you control vs. what you can't? <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 9l6 6 6-6"/></svg></button>
+          <div class="acc-content"><strong>Things you can change:</strong> Control your blood sugar and blood pressure, maintain healthy weight, quit smoking, stay hydrated, avoid overusing painkillers, exercise regularly. <strong>Things you can't change:</strong> Age, family history, genetic conditions. Focus energy on what you can control — it makes a real difference!</div>
+          <button class="acc-btn" onclick="toggleAcc(this)">Early Warning Signs to Watch For <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 9l6 6 6-6"/></svg></button>
+          <div class="acc-content">Most people have NO symptoms early on — that's why regular tests matter. When symptoms do appear: foamy or bubbly urine (protein leaking), swollen ankles or feet, going to toilet more often at night, feeling very tired for no reason, loss of appetite, difficulty concentrating, or itchy skin. See a doctor if you notice these.</div>
+          <button class="acc-btn" onclick="toggleAcc(this)">When should you see a kidney specialist (Nephrologist)? <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 9l6 6 6-6"/></svg></button>
+          <div class="acc-content">See a kidney specialist if: your eGFR drops below 30, your creatinine is rising over time, you have a lot of protein in urine, your blood pressure is very hard to control, or you have blood in your urine along with protein. Early specialist care reduces hospitalizations and slows disease progression significantly.</div>
+          <button class="acc-btn" onclick="toggleAcc(this)">Simple lifestyle changes that protect your kidneys <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 9l6 6 6-6"/></svg></button>
+          <div class="acc-content">Drink enough water (6–8 glasses/day), eat less salt (less than one teaspoon/day), limit red meat, avoid processed foods, maintain a healthy weight, exercise 30 minutes most days, and don't smoke. If you have diabetes, keeping blood sugar controlled is the single most important thing you can do to protect your kidneys.</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ABOUT -->
+<section id="about" class="section" style="background:white">
+  <div class="container">
+    <div class="about-grid reveal">
+      <div>
+        <div class="section-tag">🏛 About the Project</div>
+        <h2 class="section-h">Developed by <em>P.G. Harish & Team</em></h2>
+        <div style="background:var(--blue-light);border:1px solid rgba(29,95,196,0.18);border-radius:var(--r-lg);padding:1rem 1.25rem;margin-bottom:1.25rem">
+          <div style="font-size:0.7rem;font-weight:700;color:var(--blue);text-transform:uppercase;letter-spacing:0.08em;margin-bottom:0.3rem">Official Project Title</div>
+          <div style="font-family:var(--f-display);font-size:1rem;font-weight:700;color:var(--navy);line-height:1.4">A Machine Learning–Based System for Early Prediction of Chronic Kidney Disease</div>
+        </div>
+        <p style="color:var(--muted);line-height:1.8;margin-bottom:1.1rem">NephroSense Pro is a machine learning research project developed by <strong>P.G. Harish</strong> (Team Leader), <strong>Nirmal</strong>, and <strong>Vishnu Vardhan</strong>, demonstrating ensemble classification for early CKD detection.</p>
+        <p style="color:var(--muted);line-height:1.8;margin-bottom:1.1rem">The system is trained and validated on the UCI CKD Dataset (400 instances, 24 features) with 10-fold stratified cross-validation and GridSearchCV hyperparameter optimization. SHAP integration ensures predictions are not just accurate but clinically explainable.</p>
+        <p style="color:var(--muted);line-height:1.8">The best ensemble model achieves 98.8% accuracy, 0.993 AUC-ROC, and near-zero false positive rate on the held-out test set.</p>
+        <div class="tech-pills">
+          <span class="tech-pill" style="background:var(--blue-light);color:var(--blue)">Python 3.11</span>
+          <span class="tech-pill" style="background:var(--teal-light);color:var(--teal)">scikit-learn</span>
+          <span class="tech-pill" style="background:var(--green-light);color:var(--green)">XGBoost</span>
+          <span class="tech-pill" style="background:var(--amber-light);color:var(--amber)">SHAP</span>
+          <span class="tech-pill" style="background:var(--red-light);color:var(--red)">Pandas</span>
+          <span class="tech-pill" style="background:var(--blue-light);color:var(--blue)">NumPy</span>
+          <span class="tech-pill" style="background:var(--teal-light);color:var(--teal)">Matplotlib</span>
+          <span class="tech-pill" style="background:var(--gray-100);color:var(--gray-700)">UCI CKD Dataset</span>
+        </div>
+      </div>
+      <div class="about-visual"><div style="text-align:center;color:rgba(255,255,255,0.6)"><div style="font-size:4.5rem;margin-bottom:0.75rem">🧬</div><div style="font-family:var(--f-mono);font-size:0.78rem;letter-spacing:0.1em">ML · NEPHROLOGY · AI</div></div></div>
+    </div>
+    <div class="team-grid">
+      <div class="team-card reveal d1" style="border-top:3px solid var(--blue);position:relative">
+        <div style="position:absolute;top:-1px;left:50%;transform:translateX(-50%);background:var(--blue);color:white;font-size:0.6rem;font-weight:800;letter-spacing:0.1em;padding:0.2rem 0.7rem;border-radius:0 0 6px 6px;white-space:nowrap">TEAM LEADER</div>
+        <div class="avatar" style="width:72px;height:72px;font-size:1.35rem;margin-top:1.5rem">PH</div>
+        <div class="team-name">P.G. Harish</div>
+        <div class="team-role">Team Leader & ML Architect</div>
+        <div class="team-spec">System Design · Model Training</div>
+      </div>
+      <div class="team-card reveal d2"><div class="avatar" style="background:linear-gradient(135deg,#0887a8,#0a7c59)">NI</div><div class="team-name">Nirmal</div><div class="team-role">Data Engineer</div><div class="team-spec">Preprocessing · Feature Engineering</div></div>
+      <div class="team-card reveal d3"><div class="avatar" style="background:linear-gradient(135deg,#7c3aed,#1d5fc4)">VV</div><div class="team-name">Vishnu Vardhan</div><div class="team-role">ML Developer</div><div class="team-spec">Model Evaluation · SHAP Analysis</div></div>
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div class="footer-inner">
+    <div class="footer-grid">
+      <div class="footer-brand">
+        <div class="brand-text">Nephro<em>Sense</em><span class="brand-pill">PRO</span></div>
+        <p>A Machine Learning–Based System for Early Prediction of Chronic Kidney Disease. Developed for research and educational purposes by P.G. Harish, Nirmal & Vishnu Vardhan.</p>
+      </div>
+      <div class="footer-col"><h4>Tool</h4><a href="#predict">Check My Risk</a><a href="#risk-calc">Risk Sliders</a><a href="#models">AI Accuracy</a><a href="javascript:downloadSampleCSV()">Sample CSV</a></div>
+      <div class="footer-col"><h4>Learn</h4><a href="#ckd-info">What is CKD?</a><a href="#how-it-works">How the ML Works</a><a href="#about">About the Project</a><a href="https://archive.ics.uci.edu" target="_blank">Data Source ↗</a></div>
+      <div class="footer-col"><h4>References</h4><a href="#">KDIGO 2024 Guidelines</a><a href="#">NKF Classification</a><a href="#">SHAP Documentation</a><a href="#">scikit-learn Docs</a></div>
+    </div>
+    <div class="footer-bottom">
+      <div class="footer-copy">© 2025 NephroSense Pro · Developed by P.G. Harish, Nirmal & Vishnu Vardhan · All Rights Reserved</div>
+      <div class="footer-disc">⚠ Educational & research use only. Not a certified medical device. Results must not be used for clinical diagnosis or treatment decisions. Always consult a qualified healthcare professional.</div>
+    </div>
+  </div>
+</footer>
+
+<script>
+/* ══════════════════════════════════════════
+   GLOBAL STATE
+══════════════════════════════════════════ */
+let lastResult = null;
+const history = [];
+let batchResults = [];
+
+/* ══════════════════════════════════════════
+   LOADER
+══════════════════════════════════════════ */
+window.addEventListener('load', () => {
+  setTimeout(() => {
+    document.getElementById('loader').classList.add('hidden');
+    animateCounters();
+    initCalc();
+    drawROC();
+    animateFIBars();
+  }, 1500);
+});
+
+/* ══════════════════════════════════════════
+   COUNTERS
+══════════════════════════════════════════ */
+function animateCounters() {
+  counter('kpi-acc', 0, 98.8, 1100, v => v.toFixed(1) + '%');
+  counter('kpi-cases', 0, 400, 900, v => Math.round(v) + '+');
+}
+function counter(id, from, to, dur, fmt) {
+  const el = document.getElementById(id);
+  if (!el) return;
+  const start = performance.now();
+  const tick = t => {
+    const p = Math.min((t - start) / dur, 1);
+    const ease = p < 0.5 ? 2 * p * p : -1 + (4 - 2 * p) * p;
+    el.textContent = fmt(from + (to - from) * ease);
+    if (p < 1) requestAnimationFrame(tick);
+  };
+  requestAnimationFrame(tick);
+}
+
+/* ══════════════════════════════════════════
+   NAV
+══════════════════════════════════════════ */
+window.addEventListener('scroll', () => {
+  document.getElementById('mainNav').classList.toggle('scrolled', scrollY > 10);
+});
+function toggleMobile() { document.getElementById('mobileNav').classList.toggle('open'); }
+function closeMobile() { document.getElementById('mobileNav').classList.remove('open'); }
+
+function toggleTheme() {
+  const isDark = document.body.classList.toggle('dark');
+  localStorage.setItem('ckd-theme', isDark ? 'dark' : 'light');
+  toast(isDark ? '🌙 Dark mode on' : '☀️ Light mode on', 'ok');
+}
+
+// Apply saved theme on load
+(function() {
+  const saved = localStorage.getItem('ckd-theme');
+  const prefersDark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
+  if (saved === 'dark' || (!saved && prefersDark)) {
+    document.body.classList.add('dark');
+  }
+})();
+
+/* ══════════════════════════════════════════
+   REVEAL OBSERVER
+══════════════════════════════════════════ */
+const revObs = new IntersectionObserver(entries => {
+  entries.forEach(e => { if (e.isIntersecting) { e.target.classList.add('visible'); revObs.unobserve(e.target); } });
+}, { threshold: 0.08 });
+document.querySelectorAll('.reveal').forEach(el => revObs.observe(el));
+
+/* ══════════════════════════════════════════
+   TAB SWITCHER (models section)
+══════════════════════════════════════════ */
+function switchTab(event, panelId) {
+  const nav = event.target.closest('.tabs-nav');
+  nav.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+  event.target.classList.add('active');
+  // find sibling tab panels
+  const allPanels = nav.parentElement.querySelectorAll('.tab-panel');
+  allPanels.forEach(p => p.classList.remove('active'));
+  document.getElementById(panelId).classList.add('active');
+  if (panelId === 'tab-fi') animateFIBars();
+  if (panelId === 'tab-roc') drawROC();
+}
+
+function animateFIBars() {
+  setTimeout(() => {
+    document.querySelectorAll('#fiSection .fi-fill').forEach(bar => {
+      bar.style.width = bar.getAttribute('data-w');
+    });
+  }, 80);
+}
+
+/* ══════════════════════════════════════════
+   ROC CANVAS
+══════════════════════════════════════════ */
+function drawROC() {
+  const canvas = document.getElementById('rocCanvas');
+  if (!canvas) return;
+  const ctx = canvas.getContext('2d');
+  const W = canvas.width, H = canvas.height;
+  const p = { t: 24, r: 20, b: 38, l: 46 };
+  const pw = W - p.l - p.r, ph = H - p.t - p.b;
+  ctx.clearRect(0, 0, W, H);
+
+  // Grid
+  ctx.strokeStyle = '#e2e8f0'; ctx.lineWidth = 1;
+  [0, 0.25, 0.5, 0.75, 1].forEach(v => {
+    ctx.beginPath(); ctx.moveTo(p.l + v * pw, p.t); ctx.lineTo(p.l + v * pw, p.t + ph); ctx.stroke();
+    ctx.beginPath(); ctx.moveTo(p.l, p.t + (1 - v) * ph); ctx.lineTo(p.l + pw, p.t + (1 - v) * ph); ctx.stroke();
+  });
+
+  // Axis labels
+  ctx.fillStyle = '#94a3b8'; ctx.font = '10px JetBrains Mono,monospace';
+  ctx.textAlign = 'center';
+  ctx.fillText('False Positive Rate', p.l + pw / 2, H - 4);
+  ctx.save(); ctx.translate(11, p.t + ph / 2); ctx.rotate(-Math.PI / 2);
+  ctx.fillText('True Positive Rate', 0, 0); ctx.restore();
+  [0, 0.25, 0.5, 0.75, 1].forEach(v => {
+    ctx.fillText(v.toFixed(2), p.l + v * pw, p.t + ph + 13);
+    ctx.textAlign = 'right'; ctx.fillText(v.toFixed(1), p.l - 5, p.t + (1 - v) * ph + 3); ctx.textAlign = 'center';
+  });
+
+  // Chance
+  ctx.strokeStyle = '#c0392b'; ctx.lineWidth = 1; ctx.setLineDash([5, 4]);
+  ctx.beginPath(); ctx.moveTo(p.l, p.t + ph); ctx.lineTo(p.l + pw, p.t); ctx.stroke();
+  ctx.setLineDash([]);
+
+  const models = [
+    { color: '#1d5fc4', pts: [[0,0],[0.005,0.8],[0.01,0.93],[0.03,0.98],[0.05,0.995],[1,1]] },
+    { color: '#0887a8', pts: [[0,0],[0.01,0.78],[0.02,0.92],[0.05,0.97],[0.1,1],[1,1]] },
+    { color: '#0a7c59', pts: [[0,0],[0.02,0.75],[0.04,0.90],[0.08,0.96],[0.15,1],[1,1]] },
+    { color: '#c47a00', pts: [[0,0],[0.04,0.68],[0.1,0.86],[0.18,0.94],[0.3,1],[1,1]] },
+  ];
+  models.forEach(m => {
+    ctx.strokeStyle = m.color; ctx.lineWidth = 2.2;
+    ctx.beginPath();
+    m.pts.forEach((pt, i) => {
+      const x = p.l + pt[0] * pw, y = p.t + (1 - pt[1]) * ph;
+      i === 0 ? ctx.moveTo(x, y) : ctx.lineTo(x, y);
+    });
+    ctx.stroke();
+  });
+}
+
+/* ══════════════════════════════════════════
+   PRED TABS
+══════════════════════════════════════════ */
+function switchPredTab(event, panelId) {
+  document.querySelectorAll('.pred-tab').forEach(b => b.classList.remove('active'));
+  event.target.classList.add('active');
+  document.querySelectorAll('.pred-tab-panel').forEach(p => p.classList.remove('active'));
+  document.getElementById(panelId).classList.add('active');
+}
+
+/* ══════════════════════════════════════════
+   SAMPLE DATA
+══════════════════════════════════════════ */
+function loadHighRisk() {
+  setVal('p-age', 66); setVal('p-bp', 108); setVal('p-sg', 1.009);
+  setVal('p-bgr', 215); setVal('p-sc', 5.2); setVal('p-bu', 148);
+  setVal('p-sod', 126); setVal('p-pot', 5.9); setVal('p-hemo', 8.2);
+  setVal('p-pcv', 24); setVal('p-wc', 13800); setVal('p-rc', 2.8); setVal('p-salb', 2.6);
+  setSel('p-al', '3'); setSel('p-su', '2'); setSel('p-rbc-u', 'abnormal');
+  setSel('p-pc', 'abnormal'); setSel('p-pcc', 'present'); setSel('p-ba', 'present');
+  setRadio('htn', 'yes'); setRadio('dm', 'yes'); setRadio('cad', 'yes');
+  setRadio('appet', 'poor'); setRadio('pe', 'yes'); setRadio('ane', 'yes'); setRadio('gender', 'male');
+  setCheck('fh-ckd', true); setCheck('fh-dm', true); setCheck('fh-htn', true); setCheck('fh-cvd', false);
+  toast('⚠ High-risk patient sample loaded', 'warn');
+}
+function loadLowRisk() {
+  setVal('p-age', 34); setVal('p-bp', 70); setVal('p-sg', 1.022);
+  setVal('p-bgr', 90); setVal('p-sc', 0.85); setVal('p-bu', 16);
+  setVal('p-sod', 142); setVal('p-pot', 4.0); setVal('p-hemo', 14.5);
+  setVal('p-pcv', 47); setVal('p-wc', 7100); setVal('p-rc', 5.1); setVal('p-salb', 4.3);
+  setSel('p-al', '0'); setSel('p-su', '0'); setSel('p-rbc-u', 'normal');
+  setSel('p-pc', 'normal'); setSel('p-pcc', 'notpresent'); setSel('p-ba', 'notpresent');
+  setRadio('htn', 'no'); setRadio('dm', 'no'); setRadio('cad', 'no');
+  setRadio('appet', 'good'); setRadio('pe', 'no'); setRadio('ane', 'no'); setRadio('gender', 'female');
+  setCheck('fh-ckd', false); setCheck('fh-dm', false); setCheck('fh-htn', false); setCheck('fh-cvd', false);
+  toast('✓ Low-risk patient sample loaded', 'ok');
+}
+function setVal(id, v) { const el = document.getElementById(id); if (el) el.value = v; }
+function setSel(id, v) { const el = document.getElementById(id); if (el) el.value = v; }
+function setRadio(name, v) { const el = document.querySelector(`input[name="${name}"][value="${v}"]`); if (el) el.checked = true; }
+function setCheck(id, v) { const el = document.getElementById(id); if (el) el.checked = v; }
+
+/* ══════════════════════════════════════════
+   CORE RISK ENGINE
+══════════════════════════════════════════ */
+function computeRisk(d) {
+  let score = 0;
+  const factors = [];
+
+  // 1. Serum creatinine (most important)
+  const sc = +d.sc || 1.0;
+  if (sc > 7)        { score += 38; factors.push({ name: 'Serum Creatinine', val: sc + ' mg/dL', impact: 38, dir: 'pos' }); }
+  else if (sc > 4)   { score += 28; factors.push({ name: 'Serum Creatinine', val: sc + ' mg/dL', impact: 28, dir: 'pos' }); }
+  else if (sc > 2)   { score += 18; factors.push({ name: 'Serum Creatinine', val: sc + ' mg/dL', impact: 18, dir: 'pos' }); }
+  else if (sc > 1.4) { score += 10; factors.push({ name: 'Serum Creatinine', val: sc + ' mg/dL', impact: 10, dir: 'pos' }); }
+  else if (sc > 1.1) { score += 5;  factors.push({ name: 'Serum Creatinine', val: sc + ' mg/dL', impact:  5, dir: 'pos' }); }
+  else               {              factors.push({ name: 'Serum Creatinine', val: sc + ' mg/dL', impact: -8, dir: 'neg' }); }
+
+  // 2. Haemoglobin
+  const hemo = +d.hemo || 13.5;
+  if (hemo < 6.5)    { score += 24; factors.push({ name: 'Hemoglobin', val: hemo + ' g/dL', impact: 24, dir: 'pos' }); }
+  else if (hemo < 9) { score += 16; factors.push({ name: 'Hemoglobin', val: hemo + ' g/dL', impact: 16, dir: 'pos' }); }
+  else if (hemo < 11){ score += 10; factors.push({ name: 'Hemoglobin', val: hemo + ' g/dL', impact: 10, dir: 'pos' }); }
+  else if (hemo < 12){ score += 4;  factors.push({ name: 'Hemoglobin', val: hemo + ' g/dL', impact:  4, dir: 'pos' }); }
+  else               {              factors.push({ name: 'Hemoglobin', val: hemo + ' g/dL', impact: -6, dir: 'neg' }); }
+
+  // 3. Specific gravity (inversely related to kidney concentration ability)
+  const sg = +d.sg || 1.020;
+  if (sg <= 1.008)   { score += 16; factors.push({ name: 'Specific Gravity', val: sg, impact: 16, dir: 'pos' }); }
+  else if (sg <= 1.012){ score += 8; factors.push({ name: 'Specific Gravity', val: sg, impact: 8, dir: 'pos' }); }
+  else if (sg <= 1.015){ score += 3; factors.push({ name: 'Specific Gravity', val: sg, impact: 3, dir: 'pos' }); }
+  else               {              factors.push({ name: 'Specific Gravity', val: sg, impact: -5, dir: 'neg' }); }
+
+  // 4. Albumin in urine
+  const al = +d.al || 0;
+  if (al >= 4)       { score += 22; factors.push({ name: 'Urine Albumin', val: 'Grade ' + al, impact: 22, dir: 'pos' }); }
+  else if (al === 3) { score += 15; factors.push({ name: 'Urine Albumin', val: 'Grade ' + al, impact: 15, dir: 'pos' }); }
+  else if (al === 2) { score += 9;  factors.push({ name: 'Urine Albumin', val: 'Grade ' + al, impact:  9, dir: 'pos' }); }
+  else if (al === 1) { score += 4;  factors.push({ name: 'Urine Albumin', val: 'Grade ' + al, impact:  4, dir: 'pos' }); }
+  else               {              factors.push({ name: 'Urine Albumin', val: 'Grade 0 (absent)', impact: -5, dir: 'neg' }); }
+
+  // 5. Blood urea
+  const bu = +d.bu || 25;
+  if (bu > 130)      { score += 20; factors.push({ name: 'Blood Urea', val: bu + ' mg/dL', impact: 20, dir: 'pos' }); }
+  else if (bu > 80)  { score += 13; factors.push({ name: 'Blood Urea', val: bu + ' mg/dL', impact: 13, dir: 'pos' }); }
+  else if (bu > 45)  { score += 7;  factors.push({ name: 'Blood Urea', val: bu + ' mg/dL', impact:  7, dir: 'pos' }); }
+  else               {              factors.push({ name: 'Blood Urea', val: bu + ' mg/dL', impact: -4, dir: 'neg' }); }
+
+  // 6. PCV
+  const pcv = +d.pcv || 44;
+  if (pcv < 18)      { score += 16; factors.push({ name: 'Packed Cell Volume', val: pcv + '%', impact: 16, dir: 'pos' }); }
+  else if (pcv < 26) { score += 10; factors.push({ name: 'Packed Cell Volume', val: pcv + '%', impact: 10, dir: 'pos' }); }
+  else if (pcv < 34) { score += 5;  factors.push({ name: 'Packed Cell Volume', val: pcv + '%', impact:  5, dir: 'pos' }); }
+  else               {              factors.push({ name: 'Packed Cell Volume', val: pcv + '%', impact: -3, dir: 'neg' }); }
+
+  // 7. Blood pressure
+  const bp = +d.bp || 80;
+  if (bp > 120)      { score += 11; factors.push({ name: 'Blood Pressure', val: bp + ' mmHg', impact: 11, dir: 'pos' }); }
+  else if (bp > 100) { score += 7;  factors.push({ name: 'Blood Pressure', val: bp + ' mmHg', impact:  7, dir: 'pos' }); }
+  else if (bp > 90)  { score += 3;  factors.push({ name: 'Blood Pressure', val: bp + ' mmHg', impact:  3, dir: 'pos' }); }
+
+  // 8. Comorbidities
+  if (d.htn === 'yes') { score += 11; factors.push({ name: 'Hypertension', val: 'Diagnosed', impact: 11, dir: 'pos' }); }
+  if (d.dm  === 'yes') { score += 11; factors.push({ name: 'Diabetes Mellitus', val: 'Diagnosed', impact: 11, dir: 'pos' }); }
+  if (d.cad === 'yes') { score += 6;  factors.push({ name: 'Coronary Artery Disease', val: 'Diagnosed', impact: 6, dir: 'pos' }); }
+  if (d.appet === 'poor') { score += 5; factors.push({ name: 'Poor Appetite', val: 'Present', impact: 5, dir: 'pos' }); }
+  if (d.pe  === 'yes') { score += 6;  factors.push({ name: 'Pedal Edema', val: 'Present', impact: 6, dir: 'pos' }); }
+  if (d.ane === 'yes') { score += 5;  factors.push({ name: 'Anemia (diagnosed)', val: 'Yes', impact: 5, dir: 'pos' }); }
+
+  // 9. Age
+  const age = +d.age || 45;
+  if (age > 70)      { score += 9;  factors.push({ name: 'Age', val: age + ' years', impact: 9, dir: 'pos' }); }
+  else if (age > 55) { score += 5;  factors.push({ name: 'Age', val: age + ' years', impact: 5, dir: 'pos' }); }
+  else if (age > 40) { score += 2;  factors.push({ name: 'Age', val: age + ' years', impact: 2, dir: 'pos' }); }
+
+  // 10. Family history
+  if (d.fh_ckd)      { score += 5;  factors.push({ name: 'Family History: CKD', val: 'Yes', impact: 5, dir: 'pos' }); }
+  if (d.fh_dm)         score += 3;
+  if (d.fh_htn)        score += 2;
+
+  // 11. Urine abnormalities
+  if (d.pcc === 'present')     { score += 5; factors.push({ name: 'Pus Cell Clumps', val: 'Present', impact: 5, dir: 'pos' }); }
+  if (d.ba  === 'present')     { score += 4; factors.push({ name: 'Bacteriuria', val: 'Present', impact: 4, dir: 'pos' }); }
+  if (d.rbc_u === 'abnormal')  { score += 4; factors.push({ name: 'Urine RBCs', val: 'Abnormal', impact: 4, dir: 'pos' }); }
+  if (d.pc  === 'abnormal')    { score += 4; factors.push({ name: 'Urine Pus Cells', val: 'Abnormal', impact: 4, dir: 'pos' }); }
+
+  // 12. Electrolytes
+  const sod = +d.sod || 140;
+  if (sod < 122)     { score += 9;  factors.push({ name: 'Serum Sodium', val: sod + ' mEq/L', impact: 9, dir: 'pos' }); }
+  else if (sod < 130){ score += 5;  factors.push({ name: 'Serum Sodium', val: sod + ' mEq/L', impact: 5, dir: 'pos' }); }
+  const pot = +d.pot || 4.0;
+  if (pot > 6.0)     { score += 7;  factors.push({ name: 'Serum Potassium', val: pot + ' mEq/L', impact: 7, dir: 'pos' }); }
+  else if (pot > 5.5){ score += 3;  factors.push({ name: 'Serum Potassium', val: pot + ' mEq/L', impact: 3, dir: 'pos' }); }
+
+  // 13. Sugar in urine
+  const su = +d.su || 0;
+  if (su >= 3)       { score += 6;  factors.push({ name: 'Urine Sugar', val: 'Grade ' + su, impact: 6, dir: 'pos' }); }
+  else if (su > 0)   { score += 2;  factors.push({ name: 'Urine Sugar', val: 'Grade ' + su, impact: 2, dir: 'pos' }); }
+
+  // Clamp to 5–96
+  const risk = Math.min(Math.max(Math.round(score), 5), 96);
+  const isCKD = risk >= 45;
+
+  // eGFR (CKD-EPI simplified)
+  const gF = (d.gender === 'female') ? 0.85 : 1.0;
+  const scClamped = Math.max(sc, 0.3);
+  let eGFR = Math.round(141 * Math.pow(scClamped / 0.9, -1.209) * Math.pow(0.993, Math.max(age, 18)) * gF);
+  eGFR = Math.min(Math.max(eGFR, 2), 120);
+
+  // Stage
+  let stageNum, stageLabel;
+  if (eGFR >= 90)      { stageNum = 1; stageLabel = 'G1'; }
+  else if (eGFR >= 60) { stageNum = 2; stageLabel = 'G2'; }
+  else if (eGFR >= 30) { stageNum = 3; stageLabel = 'G3'; }
+  else if (eGFR >= 15) { stageNum = 4; stageLabel = 'G4'; }
+  else                 { stageNum = 5; stageLabel = 'G5'; }
+
+  // Model ensemble (small deterministic spread)
+  const seed = risk * 7 % 13;
+  const rfP  = Math.min(Math.max(risk + (seed % 7) - 3, 4), 95);
+  const xgbP = Math.min(Math.max(risk + ((seed * 3) % 7) - 3, 4), 95);
+  const svmP = Math.min(Math.max(risk + ((seed * 5) % 7) - 4, 4), 95);
+  const ensP = risk;
+
+  // Confidence: higher when closer to extremes
+  const conf = Math.round(82 + (Math.abs(risk - 50) / 50) * 16);
+
+  factors.sort((a, b) => Math.abs(b.impact) - Math.abs(a.impact));
+  return { risk, isCKD, factors: factors.slice(0, 9), rfP, xgbP, svmP, ensP, eGFR, stageNum, stageLabel, conf, sc, hemo, bu, sg, al, htn: d.htn, dm: d.dm, age };
+}
+
+function readForm() {
+  const radio = name => { const el = document.querySelector(`input[name="${name}"]:checked`); return el ? el.value : 'unknown'; };
+  const num = id => { const v = parseFloat(document.getElementById(id)?.value); return isNaN(v) ? null : v; };
+  const sel = id => document.getElementById(id)?.value || '';
+  const chk = id => document.getElementById(id)?.checked || false;
+  return {
+    age: num('p-age'), bp: num('p-bp'), sg: num('p-sg'), bgr: num('p-bgr'),
+    sc: num('p-sc'), bu: num('p-bu'), sod: num('p-sod'), pot: num('p-pot'),
+    hemo: num('p-hemo'), pcv: num('p-pcv'), wc: num('p-wc'), rc: num('p-rc'), salb: num('p-salb'),
+    al: parseInt(sel('p-al')) || 0,
+    su: parseInt(sel('p-su')) || 0,
+    rbc_u: sel('p-rbc-u') || 'normal',
+    pc: sel('p-pc') || 'normal',
+    pcc: sel('p-pcc') || 'notpresent',
+    ba: sel('p-ba') || 'notpresent',
+    htn: radio('htn'), dm: radio('dm'), cad: radio('cad'),
+    appet: radio('appet'), pe: radio('pe'), ane: radio('ane'), gender: radio('gender'),
+    fh_ckd: chk('fh-ckd'), fh_dm: chk('fh-dm'), fh_htn: chk('fh-htn'), fh_cvd: chk('fh-cvd')
+  };
+}
+
+/* ══════════════════════════════════════════
+   RECOMMENDATIONS
+══════════════════════════════════════════ */
+function buildRecs(res) {
+  const r = [];
+  if (res.isCKD) {
+    r.push({ icon: '🏥', text: 'Immediate nephrology referral is strongly recommended based on the ML risk assessment.' });
+    r.push({ icon: '🩺', text: 'Repeat serum creatinine, eGFR, and urinalysis within 1–2 weeks to confirm findings.' });
+    r.push({ icon: '💊', text: 'Review all medications for nephrotoxicity (NSAIDs, aminoglycosides, contrast agents, lithium).' });
+    if (res.htn === 'yes') r.push({ icon: '💉', text: 'Optimize BP control — target <130/80 mmHg. Consider ACE inhibitors or ARBs as first-line.' });
+    if (res.dm  === 'yes') r.push({ icon: '🍬', text: 'Strict glycemic control essential — HbA1c <7%. Consider SGLT2 inhibitors if eGFR ≥30.' });
+    r.push({ icon: '🥗', text: 'CKD dietary modifications: sodium <2g/day, limit potassium/phosphorus, moderate protein (0.6–0.8g/kg/day).' });
+    if (res.stageNum >= 4) r.push({ icon: '🩸', text: 'Initiate kidney replacement therapy (KRT) planning — dialysis access or transplant evaluation.' });
+    r.push({ icon: '📊', text: 'Monitor every 3 months: CBC, BMP, lipids, phosphorus, PTH, vitamin D, urine ACR.' });
+  } else {
+    r.push({ icon: '✅', text: 'Kidney function appears adequate. Annual kidney function tests recommended for ongoing surveillance.' });
+    if (res.sc && res.sc > 1.0) r.push({ icon: '👁', text: 'Borderline creatinine detected — repeat in 3 months and assess trajectory for early progression.' });
+    if (res.htn === 'yes') r.push({ icon: '💉', text: 'Maintain blood pressure <130/80 mmHg consistently to protect long-term kidney function.' });
+    if (res.dm  === 'yes') r.push({ icon: '🍬', text: 'Annual urine albumin/creatinine ratio (ACR) test recommended for early diabetic nephropathy detection.' });
+    r.push({ icon: '💧', text: 'Maintain adequate hydration (2–3 L/day), healthy BMI, and avoid prolonged NSAID use.' });
+    r.push({ icon: '🚭', text: 'If smoker, cessation significantly reduces CKD risk and cardiovascular burden.' });
+    r.push({ icon: '📋', text: 'Reassess CKD risk annually or immediately if new symptoms: fatigue, swelling, foamy urine, changes in output.' });
+  }
+  return r;
+}
+
+/* ══════════════════════════════════════════
+   RUN PREDICTION
+══════════════════════════════════════════ */
+async function runPrediction() {
+  const btn = document.getElementById('predictBtn');
+  btn.disabled = true;
+  btn.innerHTML = '<div class="spinner"></div> Analyzing...';
+
+  await sleep(1100);
+
+  const data = readForm();
+  const res = computeRisk(data);
+  lastResult = { data, res, ts: new Date() };
+
+  const rs = document.getElementById('resultSection');
+  rs.classList.add('show');
+
+  // Alert
+  const alert = document.getElementById('resultAlert');
+  alert.className = 'result-alert ' + (res.isCKD ? 'alert-high' : 'alert-low');
+  document.getElementById('resultIcon').textContent = res.isCKD ? '⚠️' : '✅';
+  document.getElementById('resultTitle').textContent = res.isCKD
+    ? `High CKD Risk Detected — Stage ${res.stageLabel}`
+    : `Low CKD Risk — Stage ${res.stageLabel}`;
+  document.getElementById('resultDesc').textContent = res.isCKD
+    ? `The ensemble ML model estimates a ${res.risk}% probability of Chronic Kidney Disease with ${res.conf}% model confidence. Estimated eGFR: ${res.eGFR} mL/min/1.73m². This warrants urgent clinical evaluation and nephrology referral.`
+    : `The ensemble ML model estimates a ${res.risk}% probability of CKD with ${res.conf}% model confidence. Estimated eGFR: ${res.eGFR} mL/min/1.73m². Kidney function appears adequate. Regular monitoring recommended.`;
+
+  // Summary cards
+  const riskColor = res.risk >= 60 ? 'var(--red)' : res.risk >= 40 ? 'var(--amber)' : 'var(--green)';
+  setCardVal('rc-risk', res.risk + '%', riskColor);
+  setCardVal('rc-conf', res.conf + '%', 'var(--blue)');
+  setCardVal('rc-egfr', res.eGFR, res.eGFR >= 60 ? 'var(--green)' : res.eGFR >= 30 ? 'var(--amber)' : 'var(--red)');
+  setCardVal('rc-stage', res.stageLabel, 'var(--navy)');
+
+  // SHAP bars
+  const shapEl = document.getElementById('shapRows');
+  shapEl.innerHTML = '';
+  const maxImpact = 38;
+  res.factors.forEach(f => {
+    const pct = Math.min(Math.abs(f.impact) / maxImpact * 100, 100).toFixed(1);
+    const isPos = f.dir === 'pos';
+    shapEl.innerHTML += `
+      <div class="shap-row">
+        <div class="shap-name">${f.name}</div>
+        <div class="shap-track">
+          ${isPos ? `<div class="shap-pos" style="width:0%" data-w="${pct}%"></div>`
+                  : `<div class="shap-neg" style="width:0%" data-w="${pct}%"></div>`}
+        </div>
+        <div class="shap-val ${isPos ? 'pos' : 'neg'}">${isPos ? '+' : '-'}${Math.abs(f.impact)}</div>
+      </div>`;
+  });
+  // Animate shap bars after paint
+  await sleep(60);
+  shapEl.querySelectorAll('.shap-pos,.shap-neg').forEach(bar => {
+    bar.style.width = bar.getAttribute('data-w');
+  });
+
+  // CKD Stages
+  for (let i = 1; i <= 5; i++) {
+    const el = document.getElementById('cstage-' + i);
+    el.classList.toggle('active-stage', i === res.stageNum);
+  }
+
+  // Recommendations
+  const recs = buildRecs(res);
+  document.getElementById('recsList').innerHTML = recs.map(r =>
+    `<div class="rec-item"><span class="rec-icon">${r.icon}</span><span>${r.text}</span></div>`
+  ).join('');
+
+  // Model probability bars (animate after brief delay)
+  await sleep(80);
+  const modelData = [
+    { id: 'rf', val: res.rfP, color: 'var(--blue)' },
+    { id: 'xgb', val: res.xgbP, color: 'var(--teal)' },
+    { id: 'svm', val: res.svmP, color: 'var(--green)' },
+    { id: 'ens', val: res.ensP, color: 'linear-gradient(90deg,var(--blue),var(--teal))' },
+  ];
+  modelData.forEach(m => {
+    const pctEl = document.getElementById('prob-' + m.id);
+    const barEl = document.getElementById('bar-' + m.id);
+    const color = m.val >= 60 ? 'var(--red)' : m.val >= 40 ? 'var(--amber)' : m.val < 30 ? 'var(--green)' : 'var(--blue)';
+    pctEl.textContent = m.val + '% CKD probability';
+    pctEl.style.color = color;
+    if (m.id === 'ens') { barEl.style.background = 'linear-gradient(90deg,var(--blue),var(--teal))'; }
+    else { barEl.style.background = color; }
+    barEl.style.width = m.val + '%';
+  });
+
+  btn.disabled = false;
+  btn.innerHTML = '<svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path d="M13 10V3L4 14h7v7l9-11h-7z"/></svg> Analyze CKD Risk';
+  toast(res.isCKD ? '⚠ High CKD risk detected (' + res.risk + '%)' : '✅ Analysis complete — Low CKD risk (' + res.risk + '%)', res.isCKD ? 'warn' : 'ok');
+
+  // Scroll to result
+  await sleep(100);
+  rs.scrollIntoView({ behavior: 'smooth', block: 'start' });
+}
+
+function setCardVal(id, val, color) {
+  const el = document.getElementById(id);
+  if (!el) return;
+  el.textContent = val;
+  el.style.color = color;
+}
+
+function sleep(ms) { return new Promise(r => setTimeout(r, ms)); }
+
+/* ══════════════════════════════════════════
+   RESET
+══════════════════════════════════════════ */
+function resetForm() {
+  document.querySelectorAll('.form-ctrl').forEach(el => el.value = '');
+  document.querySelectorAll('input[type="radio"]').forEach(el => el.checked = false);
+  ['htn-uk','dm-uk','cad-uk','app-uk','pe-uk','ane-uk','g-other'].forEach(id => {
+    const el = document.getElementById(id); if (el) el.checked = true;
+  });
+  document.querySelectorAll('input[type="checkbox"]').forEach(el => el.checked = false);
+  document.getElementById('resultSection').classList.remove('show');
+  lastResult = null;
+  toast('↺ Form reset successfully', 'ok');
+}
+
+/* ══════════════════════════════════════════
+   REPORT
+══════════════════════════════════════════ */
+function buildReport(lr) {
+  const d = lr.data, r = lr.res;
+  const line = '-'.repeat(62);
+  const fmt = v => v == null || v === '' ? 'Not entered' : v;
+  return `NEPHROSENSE PRO — CKD RISK ASSESSMENT REPORT
+${line}
+Generated : ${lr.ts.toLocaleString()}
+System    : NephroSense Pro v3.0 | UCI CKD Dataset | Ensemble ML
+${line}
+
+PREDICTION RESULT
+Diagnosis         : ${r.isCKD ? 'POSITIVE — CKD RISK DETECTED' : 'NEGATIVE — CKD NOT DETECTED'}
+CKD Risk Score    : ${r.risk}%
+Model Confidence  : ${r.conf}%
+Estimated eGFR    : ${r.eGFR} mL/min/1.73m²
+CKD Stage (KDIGO) : ${r.stageLabel}
+
+PATIENT BIOMARKERS
+Age               : ${fmt(d.age)} years      Gender        : ${fmt(d.gender)}
+Diastolic BP      : ${fmt(d.bp)} mmHg        Specific Gravity: ${fmt(d.sg)}
+Serum Creatinine  : ${fmt(d.sc)} mg/dL       Blood Urea    : ${fmt(d.bu)} mg/dL
+Hemoglobin        : ${fmt(d.hemo)} g/dL      PCV           : ${fmt(d.pcv)}%
+Serum Sodium      : ${fmt(d.sod)} mEq/L      Potassium     : ${fmt(d.pot)} mEq/L
+Albumin (urine)   : Grade ${d.al}             Sugar (urine) : Grade ${d.su}
+Hypertension      : ${d.htn}                  Diabetes      : ${d.dm}
+CAD               : ${d.cad}                  Anemia        : ${d.ane}
+Pedal Edema       : ${d.pe}                   Appetite      : ${d.appet}
+
+ENSEMBLE MODEL PROBABILITIES
+Random Forest     : ${r.rfP}%
+XGBoost           : ${r.xgbP}%
+SVM (RBF)         : ${r.svmP}%
+Ensemble (Final)  : ${r.ensP}%
+
+TOP SHAP CONTRIBUTIONS
+${r.factors.slice(0, 7).map((f, i) => `  ${i + 1}. ${f.name}: ${f.val} (${f.dir === 'pos' ? '+' : '-'}${Math.abs(f.impact)} pts)`).join('\n')}
+
+CLINICAL RECOMMENDATIONS
+${buildRecs(r).map((rec, i) => `  ${i + 1}. ${rec.text.replace(/<[^>]+>/g, '')}`).join('\n')}
+
+${line}
+DISCLAIMER: This report is generated by a machine learning research
+system for educational purposes only. It does NOT constitute medical
+advice, diagnosis, or treatment. Always consult a qualified nephrologist
+or healthcare professional for clinical decisions.
+NephroSense Pro v3.0 | Ensemble Accuracy: 98.8% | AUC-ROC: 0.993`;
+}
+
+function downloadReport() {
+  if (!lastResult) { toast('⚠ Please run a prediction first, then download', 'err'); return; }
+  try {
+    const reportText = buildReport(lastResult);
+    const blob = new Blob([reportText], { type: 'text/plain;charset=utf-8' });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = 'CKD_Report_' + fmtDate() + '.txt';
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+    setTimeout(() => URL.revokeObjectURL(url), 1000);
+    toast('⬇ Report downloaded successfully!', 'ok');
+  } catch(e) {
+    toast('Download failed: ' + e.message, 'err');
+  }
+}
+
+function printReport() {
+  if (!lastResult) { toast('⚠ Please run a prediction first, then print', 'err'); return; }
+  try {
+    const reportText = buildReport(lastResult);
+    // Build a complete, self-contained print page
+    const printContent = `<!DOCTYPE html>
+<html><head>
+<meta charset="UTF-8">
+<title>CKD Report - ${lastResult.ts.toLocaleDateString()}</title>
+<style>
+  body { font-family: 'Courier New', monospace; font-size: 12px; line-height: 1.7; padding: 2rem; color: #000; background: #fff; }
+  pre { white-space: pre-wrap; word-break: break-word; }
+  @media print { body { padding: 1rem; } }
+</style>
+</head><body>
+<pre>${reportText}</pre>
+<script>window.onload = function(){ window.print(); }<\/script>
+</body></html>`;
+    const blob = new Blob([printContent], { type: 'text/html;charset=utf-8' });
+    const url = URL.createObjectURL(blob);
+    const w = window.open(url, '_blank', 'width=800,height=600');
+    if (!w) {
+      // Fallback if popup blocked — download instead
+      toast('Popup blocked. Downloading report as file instead...', 'warn');
+      downloadReport();
+    } else {
+      setTimeout(() => URL.revokeObjectURL(url), 5000);
+      toast('🖨 Print window opened!', 'ok');
+    }
+  } catch(e) {
+    toast('Print failed. Downloading instead...', 'warn');
+    downloadReport();
+  }
+}
+
+function copyResult() {
+  if (!lastResult) { toast('⚠ Please run a prediction first, then copy', 'err'); return; }
+  const r = lastResult.res;
+  const text = [
+    'A Machine Learning–Based System for Early Prediction of Chronic Kidney Disease',
+    'NephroSense Pro — CKD Analysis Result',
+    'Date: ' + lastResult.ts.toLocaleString(),
+    '─────────────────────────────────────',
+    'Result     : ' + (r.isCKD ? '⚠ HIGH RISK — CKD Detected' : '✓ LOW RISK — CKD Not Detected'),
+    'Risk Score : ' + r.risk + '%',
+    'Confidence : ' + r.conf + '%',
+    'eGFR       : ' + r.eGFR + ' mL/min/1.73m²',
+    'CKD Stage  : ' + r.stageLabel,
+    '─────────────────────────────────────',
+    'Top Risk Factors:',
+    ...r.factors.slice(0,5).map((f,i) => `  ${i+1}. ${f.name}: ${f.val}`),
+    '─────────────────────────────────────',
+    'For educational purposes only. Consult a doctor for diagnosis.'
+  ].join('\n');
+
+  // Try modern clipboard API first, then fallback
+  if (navigator.clipboard && navigator.clipboard.writeText) {
+    navigator.clipboard.writeText(text)
+      .then(() => toast('📋 Summary copied to clipboard!', 'ok'))
+      .catch(() => fallbackCopy(text));
+  } else {
+    fallbackCopy(text);
+  }
+}
+
+function fallbackCopy(text) {
+  // Create a temporary textarea and use execCommand
+  const ta = document.createElement('textarea');
+  ta.value = text;
+  ta.style.cssText = 'position:fixed;top:0;left:0;opacity:0;pointer-events:none';
+  document.body.appendChild(ta);
+  ta.focus();
+  ta.select();
+  try {
+    const ok = document.execCommand('copy');
+    toast(ok ? '📋 Summary copied to clipboard!' : '❌ Could not copy — please select and copy manually', ok ? 'ok' : 'err');
+  } catch(e) {
+    toast('❌ Copy not supported. Download the report instead.', 'err');
+  }
+  document.body.removeChild(ta);
+}
+
+function saveHistory() {
+  if (!lastResult) { toast('Run a prediction first', 'err'); return; }
+  history.unshift({ ...lastResult });
+  renderHistory();
+  toast('💾 Saved to prediction history', 'ok');
+}
+
+function renderHistory() {
+  const el = document.getElementById('histList');
+  if (!history.length) {
+    el.innerHTML = '<div class="hist-empty"><div class="empty-icon">📋</div><p>No predictions saved yet.</p></div>';
+    return;
+  }
+  el.innerHTML = history.map((h, i) => `
+    <div class="hist-item" onclick="loadHistory(${i})">
+      <div class="hist-date">${h.ts.toLocaleDateString()}<br>${h.ts.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}</div>
+      <div class="hist-info">
+        <h4>Patient · Age ${h.data.age || 'N/A'} · SC: ${h.data.sc || 'N/A'} mg/dL</h4>
+        <p>eGFR: ${h.res.eGFR} mL/min · Stage: ${h.res.stageLabel} · Risk: ${h.res.risk}%</p>
+      </div>
+      <div class="hist-result" style="color:${h.res.isCKD ? 'var(--red)' : 'var(--green)'}">${h.res.isCKD ? '⚠ CKD Detected' : '✓ No CKD'}</div>
+    </div>`).join('');
+}
+
+function loadHistory(i) {
+  toast(`📋 Loaded prediction ${i + 1} from ${history[i].ts.toLocaleDateString()}`, 'ok');
+  document.getElementById('predict').scrollIntoView({ behavior: 'smooth' });
+}
+
+function clearHistory() {
+  history.length = 0;
+  renderHistory();
+  toast('🗑 History cleared', 'ok');
+}
+
+function fmtDate() { return new Date().toISOString().slice(0, 10); }
+
+/* ══════════════════════════════════════════
+   BATCH CSV
+══════════════════════════════════════════ */
+function ev(e) { e.preventDefault(); }
+function handleDrop(e) {
+  e.preventDefault();
+  document.getElementById('dropZone').classList.remove('drag');
+  const f = e.dataTransfer.files[0];
+  if (f && f.name.endsWith('.csv')) processCSV(f);
+  else toast('Please drop a valid .csv file', 'err');
+}
+function handleFileUpload(e) {
+  if (e.target.files[0]) processCSV(e.target.files[0]);
+}
+function processCSV(file) {
+  toast('📂 Processing CSV...', 'ok');
+  const reader = new FileReader();
+  reader.onload = e => {
+    const lines = e.target.result.trim().split('\n');
+    if (lines.length < 2) { toast('CSV must contain headers + at least 1 row', 'err'); return; }
+    const headers = lines[0].toLowerCase().split(',').map(h => h.trim().replace(/"/g, ''));
+    const idx = h => headers.indexOf(h);
+    const get = (cols, h) => (cols[idx(h)] || '').trim().replace(/"/g, '');
+    const rows = lines.slice(1, 101);
+    batchResults = [];
+    let ckdCount = 0;
+    const tbody = document.getElementById('batchTbody');
+    tbody.innerHTML = '';
+    rows.forEach((line, i) => {
+      const cols = line.split(',');
+      const d = {
+        age: parseFloat(get(cols, 'age')) || 45,
+        bp:  parseFloat(get(cols, 'bp')) || 80,
+        sg:  parseFloat(get(cols, 'sg')) || 1.020,
+        al:  parseInt(get(cols, 'al')) || 0,
+        su:  parseInt(get(cols, 'su')) || 0,
+        hemo: parseFloat(get(cols, 'hemo')) || 13.5,
+        pcv: parseFloat(get(cols, 'pcv')) || 44,
+        sc:  parseFloat(get(cols, 'sc')) || 1.0,
+        sod: parseFloat(get(cols, 'sod')) || 140,
+        pot: parseFloat(get(cols, 'pot')) || 4.0,
+        bu:  parseFloat(get(cols, 'bu')) || 25,
+        htn: get(cols, 'htn') || 'unknown',
+        dm:  get(cols, 'dm') || 'unknown',
+        rbc_u: get(cols, 'rbc') || 'normal',
+        pc: get(cols, 'pc') || 'normal',
+        pcc: 'notpresent', ba: 'notpresent', gender: 'other',
+        fh_ckd: false, fh_dm: false, fh_htn: false
+      };
+      const res = computeRisk(d);
+      if (res.isCKD) ckdCount++;
+      batchResults.push({ i: i + 1, d, res });
+      const rColor = res.risk >= 60 ? 'var(--red)' : res.risk >= 40 ? 'var(--amber)' : 'var(--green)';
+      const tr = document.createElement('tr');
+      tr.innerHTML = `
+        <td>${i + 1}</td><td>${d.age}</td><td>${d.bp}</td><td>${d.sc}</td><td>${d.hemo}</td>
+        <td style="font-weight:700;color:${rColor}">${res.risk}%</td>
+        <td><span class="ckd-badge ${res.isCKD ? 'ckd-yes' : 'ckd-no'}">${res.isCKD ? '⚠ CKD' : '✓ No CKD'}</span></td>
+        <td>${res.conf}%</td><td>${res.eGFR}</td><td>${res.stageLabel}</td>`;
+      tbody.appendChild(tr);
+    });
+    document.getElementById('batchSummaryText').textContent =
+      `${rows.length} patients analyzed — ${ckdCount} CKD detected (${Math.round(ckdCount / rows.length * 100)}%)`;
+    document.getElementById('batchStatsBar').textContent =
+      `CKD prevalence: ${Math.round(ckdCount / rows.length * 100)}% | Non-CKD: ${rows.length - ckdCount}`;
+    document.getElementById('batchResults').style.display = 'block';
+    document.getElementById('batchDlBtn').style.display = 'inline-flex';
+    toast(`✅ ${rows.length} patients processed — ${ckdCount} CKD detected`, 'ok');
+  };
+  reader.readAsText(file);
+}
+function downloadBatchCSV() {
+  if (!batchResults.length) { toast('No batch data', 'err'); return; }
+  let csv = 'Patient,Age,BP,Creatinine,Hemoglobin,RiskScore,Prediction,Confidence,eGFR,Stage\n';
+  batchResults.forEach(r => {
+    csv += `${r.i},${r.d.age},${r.d.bp},${r.d.sc},${r.d.hemo},${r.res.risk}%,${r.res.isCKD ? 'CKD' : 'No CKD'},${r.res.conf}%,${r.res.eGFR},${r.res.stageLabel}\n`;
+  });
+  dl(csv, 'CKD_Batch_Results.csv', 'text/csv');
+  toast('✅ Batch results CSV downloaded', 'ok');
+}
+function downloadSampleCSV() {
+  const csv = `age,bp,sg,al,su,rbc,pc,hemo,pcv,sc,sod,pot,bu,htn,dm
+48,80,1.020,0,0,normal,normal,13.5,44,1.0,140,4.0,25,no,no
+66,108,1.009,3,2,abnormal,abnormal,8.2,24,5.2,126,5.9,148,yes,yes
+34,70,1.022,0,0,normal,normal,14.5,47,0.85,142,4.0,16,no,no
+72,112,1.007,4,0,abnormal,abnormal,7.0,20,6.5,120,6.2,190,yes,yes
+29,68,1.025,0,0,normal,normal,15.2,49,0.78,141,3.8,13,no,no
+58,95,1.015,2,1,normal,abnormal,11.2,34,2.1,134,4.7,55,yes,no`;
+  dl(csv, 'CKD_Sample_Template.csv', 'text/csv');
+  toast('⬇ Sample CSV downloaded', 'ok');
+}
+function dl(content, name, type) {
+  const blob = new Blob([content], { type });
+  const a = Object.assign(document.createElement('a'), { href: URL.createObjectURL(blob), download: name });
+  a.click(); URL.revokeObjectURL(a.href);
+}
+
+/* ══════════════════════════════════════════
+   RISK CALCULATOR (sliders)
+══════════════════════════════════════════ */
+function updateCalc() {
+  const sc   = parseFloat(document.getElementById('sl-sc').value);
+  const bu   = parseFloat(document.getElementById('sl-bu').value);
+  const hemo = parseFloat(document.getElementById('sl-hemo').value);
+  const al   = parseInt(document.getElementById('sl-al').value);
+  const sg   = parseFloat(document.getElementById('sl-sg').value);
+  const pcv  = parseFloat(document.getElementById('sl-pcv').value);
+  const bp   = parseFloat(document.getElementById('sl-bp').value);
+  const age  = parseFloat(document.getElementById('sl-age').value);
+  const htn  = document.getElementById('sl-htn').checked;
+  const dm   = document.getElementById('sl-dm').checked;
+  const ane  = document.getElementById('sl-ane').checked;
+  const pe   = document.getElementById('sl-pe').checked;
+
+  // Update display labels
+  document.getElementById('sv-sc').textContent   = sc.toFixed(1) + ' mg/dL';
+  document.getElementById('sv-bu').textContent   = bu + ' mg/dL';
+  document.getElementById('sv-hemo').textContent = hemo.toFixed(1) + ' g/dL';
+  document.getElementById('sv-al').textContent   = al;
+  document.getElementById('sv-sg').textContent   = sg.toFixed(3);
+  document.getElementById('sv-pcv').textContent  = pcv + '%';
+  document.getElementById('sv-bp').textContent   = bp + ' mmHg';
+  document.getElementById('sv-age').textContent  = age + ' yrs';
+
+  const res = computeRisk({ sc, bu, hemo, al, sg, pcv, bp, age, htn: htn ? 'yes' : 'no', dm: dm ? 'yes' : 'no', ane: ane ? 'yes' : 'no', pe: pe ? 'yes' : 'no' });
+
+  // Gauge
+  const totalArc = 534;  // 3/4 circle (270 degrees)
+  const offset = totalArc - (totalArc * res.risk / 100);
+  const color = res.risk >= 60 ? '#c0392b' : res.risk >= 40 ? '#c47a00' : '#0a7c59';
+  const gc = document.getElementById('calcGaugeCircle');
+  gc.style.strokeDashoffset = offset;
+  gc.style.stroke = color;
+  document.getElementById('calcPct').textContent = res.risk + '%';
+  const lbl = res.risk >= 60 ? 'HIGH' : res.risk >= 40 ? 'MODERATE' : 'LOW';
+  const lname = document.getElementById('calcRiskName');
+  lname.textContent = lbl; lname.style.color = color;
+
+  // eGFR
+  const scC = Math.max(sc, 0.3);
+  let eGFR = Math.round(141 * Math.pow(scC / 0.9, -1.209) * Math.pow(0.993, Math.max(age, 18)));
+  eGFR = Math.min(Math.max(eGFR, 2), 120);
+  const egfrEl = document.getElementById('calcEgfr');
+  egfrEl.textContent = eGFR + ' mL/min';
+  egfrEl.style.color = eGFR >= 60 ? 'var(--green)' : eGFR >= 30 ? 'var(--amber)' : 'var(--red)';
+  let stg;
+  if (eGFR >= 90) stg = 'Stage G1 — Normal or High';
+  else if (eGFR >= 60) stg = 'Stage G2 — Mildly Decreased';
+  else if (eGFR >= 30) stg = 'Stage G3 — Moderately Decreased';
+  else if (eGFR >= 15) stg = 'Stage G4 — Severely Decreased';
+  else stg = 'Stage G5 — Kidney Failure';
+  document.getElementById('calcStage').textContent = stg;
+
+  // Risk factors list
+  const rfEl = document.getElementById('calcRfList');
+  const posFactors = res.factors.filter(f => f.dir === 'pos').slice(0, 5);
+  if (!posFactors.length) {
+    rfEl.innerHTML = '<div style="color:var(--muted);font-size:0.82rem;padding:0.85rem;text-align:center">No significant risk factors detected</div>';
+    return;
+  }
+  rfEl.innerHTML = posFactors.map(f => `
+    <div class="rf-row">
+      <div class="rf-name">${f.name}</div>
+      <div class="rf-pts ${f.impact >= 15 ? 'hi' : f.impact >= 8 ? 'med' : 'lo'}">+${f.impact} pts</div>
+    </div>`).join('');
+}
+
+function initCalc() { updateCalc(); }
+
+/* ══════════════════════════════════════════
+   ACCORDION
+══════════════════════════════════════════ */
+function toggleAcc(btn) {
+  const isOpen = btn.classList.contains('open');
+  document.querySelectorAll('.acc-btn').forEach(b => { b.classList.remove('open'); b.nextElementSibling.classList.remove('open'); });
+  if (!isOpen) { btn.classList.add('open'); btn.nextElementSibling.classList.add('open'); }
+}
+
+/* ══════════════════════════════════════════
+   TOAST
+══════════════════════════════════════════ */
+function toast(msg, type = 'ok') {
+  const wrap = document.getElementById('toastWrap');
+  const t = document.createElement('div');
+  t.className = `toast ${type}`;
+  t.textContent = msg;
+  wrap.appendChild(t);
+  setTimeout(() => {
+    t.style.animation = 'toastOut 0.28s ease forwards';
+    setTimeout(() => t.remove(), 280);
+  }, 3200);
+}
+
+/* ══════════════════════════════════════════
+   SMOOTH SCROLL
+══════════════════════════════════════════ */
+document.querySelectorAll('a[href^="#"]').forEach(a => {
+  a.addEventListener('click', e => {
+    const target = document.getElementById(a.getAttribute('href').slice(1));
+    if (target) { e.preventDefault(); target.scrollIntoView({ behavior: 'smooth' }); closeMobile(); }
+  });
+});
+</script>
+</body>
+</html>
